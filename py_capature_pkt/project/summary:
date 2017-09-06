@@ -1,0 +1,31 @@
+summary:
+['__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_field_order', '_fields', 'destination', 'info', 'length', 'no', 'protocol', 'source', 'summary_line', 'time']
+
+summary_line:
+print pkt.summary_line
+3 17.955349 0.0.0.0 255.255.255.255 DHCP 350 DHCP Discover - Transaction ID 0xbbbce93a
+
+1995 160.256387 192.168.10.254 192.168.10.17 TCP 70 [TCP Out-Of-Order] 55771 \xe2\x86\x92 20006 [SYN] Seq=0 Win=8192 Len=0 MSS=1460 WS=256 SACK_PERM=1
+
+time:
+160.256387
+
+非摘要:
+>>> print dir(pkt)
+['__class__', '__contains__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getitem__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_packet_string', 'captured_length', 'eth', 'frame_info', 'get_multiple_layers', 'highest_layer', 'interface_captured', 'ip', 'layers', 'length', 'number', 'pretty_print', 'sniff_time', 'sniff_timestamp', 'tcp', 'transport_layer']
+
+>>> print dir(pkt.transport_layer)
+['__add__', '__class__', '__contains__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__getnewargs__', '__getslice__', '__gt__', '__hash__', '__init__', '__le__', '__len__', '__lt__', '__mod__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__rmod__', '__rmul__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '_formatter_field_name_split', '_formatter_parser', 'capitalize', 'center', 'count', 'decode', 'encode', 'endswith', 'expandtabs', 'find', 'format', 'index', 'isalnum', 'isalpha', 'isdigit', 'islower', 'isspace', 'istitle', 'isupper', 'join', 'ljust', 'lower', 'lstrip', 'partition', 'replace', 'rfind', 'rindex', 'rjust', 'rpartition', 'rsplit', 'rstrip', 'split', 'splitlines', 'startswith', 'strip', 'swapcase', 'title', 'translate', 'upper', 'zfill']
+>>> 
+
+
+
+获取 rtt
+
+>>> pkt  = cap[2]
+>>> print dir(pkt.tcp)
+['DATA_LAYER', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_all_fields', '_field_prefix', '_get_all_field_lines', '_get_all_fields_with_alternates', '_get_field_or_layer_repr', '_get_field_repr', '_layer_name', '_sanitize_field_name', '_ws_expert', '_ws_expert_group', '_ws_expert_message', '_ws_expert_severity', 'ack', 'analysis', 'analysis_ack_rtt', 'analysis_acks_frame', 'checksum', 'checksum_status', 'connection_sack', 'dstport', 'field_names', 'flags', 'flags_ack', 'flags_cwr', 'flags_ecn', 'flags_fin', 'flags_ns', 'flags_push', 'flags_res', 'flags_reset', 'flags_str', 'flags_syn', 'flags_urg', 'get', 'get_field', 'get_field_by_showname', 'get_field_value', 'hdr_len', 'layer_name', 'len', 'option_kind', 'option_len', 'options', 'options_mss', 'options_mss_val', 'options_nop', 'options_sack_perm', 'options_wscale', 'options_wscale_multiplier', 'options_wscale_shift', 'port', 'pretty_print', 'raw_mode', 'seq', 'srcport', 'stream', 'urgent_pointer', 'window_size', 'window_size_value']
+>>> print pkt.tcp.analysis_ack_rtt
+0.000654000
+>>> 
+

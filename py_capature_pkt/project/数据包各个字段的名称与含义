@@ -1,0 +1,8 @@
+从数据包中解析出的数据在json格式中的key
+
+原地址 IP：source
+目的地址 IP: destination
+协议：protocol
+抓取到数据包的时间：time
+RTT: rtt
+
