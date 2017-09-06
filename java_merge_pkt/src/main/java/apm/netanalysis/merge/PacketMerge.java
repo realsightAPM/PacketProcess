@@ -5,27 +5,32 @@ import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
-import apm.netanalysis.mode.BaseInfo;
-import apm.netanalysis.mode.BaseStatisticInfo;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import apm.netanalysis.info.SessionFingermark;
 
 public class PacketMerge implements Runnable{
-	
-	/*
-	 * 存储数据包的统计信息
-	 */
-	private AtomicReference<HashMap<String,BaseStatisticInfo>> mapAtomicf ;
    
 	/*
 	 * 接收到的String应该是一个list列表
 	 * 将String转换为一个object，然后取出其中的数据，进行统计
 	 */
-	private ConcurrentLinkedQueue<String> queue;
+	private ConcurrentLinkedQueue<JsonArray> queue;
 	
 	private boolean shutdown;
 	
-	public  PacketMerge(ConcurrentLinkedQueue<String> queue, AtomicReference<HashMap<String,BaseStatisticInfo>> mapAtomicf){
+	private AtomicReference<HashMap<String,JsonObject>> mapAtomicf;
+	
+	/*
+	 * 保存对于不同应用或者协议的统计合并方式，map的key对应与mergerProcessor的名字，即包含在pkt中的一个ID号称作color
+	 */
+	private HashMap<String,MergeProcessor> megerProcessors;
+	
+	private HashMap<String,SessionFingermark> sesionConfig;
+	
+	public  PacketMerge(ConcurrentLinkedQueue<JsonArray> queue){
 		this.queue = queue;
-		this.mapAtomicf = mapAtomicf; 
 		this.shutdown = false;
 	}
 
@@ -33,33 +38,26 @@ public class PacketMerge implements Runnable{
 	/*
 	 * 做合并，将一个list的信息 
 	 */
-	public void Merger(List<BaseInfo> list){
-			for(BaseInfo bi : list){
+	public void Merger(List<JsonObject> list){
+			for(JsonObject bi : list){
 				String sessionFingermark = getSessionFingermark(bi);
 				add(sessionFingermark,bi);
 			}
 	}
 	
 	/*
-	 * 
+	 * 将一个数据包加入统计结果
 	 */
-	private void add(String key,BaseInfo bi){
-		final HashMap<String,BaseStatisticInfo> map = mapAtomicf.get();
-		BaseStatisticInfo bsi = map.get(key);
-		long length  = bsi.getByteCount() + bi.getLength();
-		int count = bsi.getCount()+1;
-		float rtt = bsi.getRtt();
-		bsi.setByteCount(length);
-		bsi.setCount(count);
-		bsi.setRtt(rtt);
+	private void add(String key,JsonObject pkt){
+		
 	}
 	
-	private String getSessionFingermark(BaseInfo bi){
-		StringBuilder sb = new StringBuilder();
-		sb.append(bi.getSourceApp());
-		sb.append(bi.getDistinationApp());
-		sb.append(bi.getProtocol());
-		return sb.toString();
+/*
+ * 获取将可以标示一个会话的字段拼成一个key
+ */
+	private String getSessionFingermark(JsonObject bi){
+		
+		return "";
 	}
 	
 	public void close(){
@@ -68,7 +66,12 @@ public class PacketMerge implements Runnable{
 
 
 	public void run() {
-		// TODO Auto-generated method stub
+		while(!shutdown){
+			JsonArray pktInfoList = queue.poll();
+			if(pktInfoList!=null){
+				
+			}
+		}
 		
 	}
 	
