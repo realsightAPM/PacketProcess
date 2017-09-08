@@ -3,7 +3,7 @@ import multiprocessing
 import time
 import BloomFilter
 import json
-from PushToKafka import KafkaUtil
+from kafka import KafkaProducer
 
 class processPkt(multiprocessing.Process):
 
@@ -13,12 +13,13 @@ class processPkt(multiprocessing.Process):
         self.processors = processors
         self.pkt_id = 0
         self.bloomFilter = BloomFilter.MyBloomFilter()
-        self.kafkaUtil = KafkaUtil(serverAddr='localhost:9092')
-        self.topic = 'net_packet'
+        self.topic = "netpacket"
         self.queue = []
+        print "init finish"
 
     def run(self):
         start = time.time()
+        self.producer = KafkaProducer(bootstrap_servers='localhost:9092')
         while True:
                 pkts = self.out_pipe.recv()
                 pkt_dst = json.loads(pkts)
@@ -41,10 +42,15 @@ class processPkt(multiprocessing.Process):
         if(self.bloomFilter.contains(''.join(value))):
             return
         else:
-            queue.append(pkt_dst)
-            if(len(queue) > 100):
-                self.kafkaUtil.pushData(self.topic,json.dumps(queue))
-                queue=[]
+            self.queue.append(pkt_dst)
+            if(len(self.queue) > 100):
+                data = json.dumps(self.queue)
+                future = self.producer.send("netpacket",data)
+                print "send data"
+                result = future.get(timeout=10)
+                print "send success"
+                print result
+                self.queue=[]
 
 
 

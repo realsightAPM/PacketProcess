@@ -28,7 +28,8 @@ class capturePkt(multiprocessing.Process):
             self.pkt_id = self.pkt_id + 1
             return pkt_dst
         except AttributeError as e:
-            print str(e)
+            pass
+          #  print str(e)
         return None
 
     def process_summaries(self,pkt):
