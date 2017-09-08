@@ -8,12 +8,24 @@ import java.util.List;
  */
 public class SessionFingermark {
    private List<String> filedsList = new LinkedList<String>();
-   
-   /*
-    * 改写成读取配置文件
-    */
-   public void init(){
-	   filedsList.add("source");
-	   filedsList.add("destination");
+
+   public SessionFingermark(){
+	   String[] sss = {
+			   "src_addr_s",
+			   "src_port_s",
+			   "dst_addr_s",
+			   "dst_port_s"
+	   };
+	   for(String str:sss){
+		   filedsList.add(str);
+	   }
    }
+	public List<String> getFiledsList() {
+		return filedsList;
+	}
+	
+	public void setFiledsList(List<String> filedsList) {
+		this.filedsList = filedsList;
+	}
+
 }

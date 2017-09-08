@@ -31,6 +31,7 @@ public class PacketProducer implements Runnable{
 	public void run() {
 	
 		while(!shutdown){
+			System.out.println("read *********");
 			List<String> list = readKafka.getData();
 			for(String str:list){
 				try{
@@ -43,7 +44,7 @@ public class PacketProducer implements Runnable{
 		}
 	}
 
-	public void stop(){
+	public void close(){
 		this.shutdown = true;
 	}
 }

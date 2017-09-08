@@ -32,9 +32,18 @@ public class KafkaReadUtils {
 	public List<String> getData(){
 			List<String> list = new LinkedList<String>();
 			ConsumerRecords<String,String> records = consumer.poll(100);
+			System.out.println("$$$$$$$$");
+			if(records==null || records.isEmpty())
+				System.out.println("&&&&&& is NULL NULL NULL");
+			
 			for(ConsumerRecord<String, String> record : records){
 				if(record!=null && record.value() !=null)
+				{
+					System.out.println("####"+record.value());
 					list.add(record.value());
+				}else{
+					System.out.println(" null null");
+				}
 			}
 		 return list;
 	}
