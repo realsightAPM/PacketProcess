@@ -1,4 +1,4 @@
-package apm.netanalysis.Utils;
+package apm.netanalysis;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -11,17 +11,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 
 import apm.netanalysis.info.KafkaInfo;
 
-public class KafkaReadUtils {
- 
-	private Properties props;
-	
-	private KafkaConsumer<String,String> consumer;
-	
-	public void init(){
+public class Test {
+
+	public static void main(String[] args) {
+		Properties props;
 		
-	}
-	
-	public List<String> getData(){
 		props = new Properties();
 		props.put("bootstrap.servers", KafkaInfo.getReadAddr());
 	     props.put("group.id", "netanalysis");
@@ -29,9 +23,10 @@ public class KafkaReadUtils {
 	     props.put("auto.commit.interval.ms", "1000");
 	     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 	     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-	     consumer = new KafkaConsumer<String,String>(props);
+	     KafkaConsumer<String,String>    consumer = new KafkaConsumer<String,String>(props);
 	     consumer.subscribe(Arrays.asList(KafkaInfo.getReadTopic()));
-			List<String> list = new LinkedList<String>();
+	     
+	     List<String> list = new LinkedList<String>();
 			ConsumerRecords<String,String> records = consumer.poll(100);
 			System.out.println("$$$$$$$$");
 			if(records==null || records.isEmpty())
@@ -46,7 +41,7 @@ public class KafkaReadUtils {
 					System.out.println(" null null");
 				}
 			}
-		 return list;
+
 	}
-	
+
 }
