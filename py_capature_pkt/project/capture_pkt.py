@@ -41,6 +41,7 @@ class capturePkt(multiprocessing.Process):
         pkt_dst['summary_line'] = pkt.summary_line
         pkt_dst['length'] = pkt.length
         pkt_dst['info'] = pkt.info
+        pkt_dst['color'] = "tcp"
         return pkt_dst
 
     def run(self):

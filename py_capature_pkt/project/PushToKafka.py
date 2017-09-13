@@ -4,7 +4,7 @@
 import json
 from kafka import KafkaProducer
 class KafkaUtil:
-    producer = KafkaProducer(bootstrap_servers='localhost:9092')
+    #producer = KafkaProducer(bootstrap_servers='10.4.53.25:9092')
     def __init__(self,serverAddr):
         print "serverAddr " + serverAddr
         

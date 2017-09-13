@@ -19,7 +19,7 @@ class processPkt(multiprocessing.Process):
 
     def run(self):
         start = time.time()
-        self.producer = KafkaProducer(bootstrap_servers='localhost:9092')
+        self.producer = KafkaProducer(bootstrap_servers='10.4.53.25:9092')
         while True:
                 pkts = self.out_pipe.recv()
                 pkt_dst = json.loads(pkts)
