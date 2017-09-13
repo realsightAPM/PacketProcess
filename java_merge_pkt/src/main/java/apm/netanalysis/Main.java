@@ -12,10 +12,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import apm.netanalysis.Utils.kafkaWriteUtil;
+
+import apm.netanalysis.info.SessionFingermark;
 import apm.netanalysis.merge.MergeProcessor;
 import apm.netanalysis.merge.PacketMerge;
 import apm.netanalysis.merge.PktSender;
-import apm.netanalysis.merge.TCPMergeProcessorImp;
+
+import apm.netanalysis.merge.TestMergeProcessorImp;
 import apm.netanalysis.producer.PacketProducer;
 
 /*
@@ -24,43 +27,45 @@ import apm.netanalysis.producer.PacketProducer;
 public class Main {
 
 	private static ExecutorService packetProcessorPool = Executors.newFixedThreadPool(2);
-	
+
 	private static ScheduledExecutorService dataSender = Executors.newScheduledThreadPool(3);
-	
-	private static PacketProducer packetProducer ;
-	
+
+	private static PacketProducer packetProducer;
+
 	private static PacketMerge packetMerge;
-	
-	private static  AtomicReference<HashMap<String,JsonObject>> mapAtomicf;
-	
+
+	private static AtomicReference<HashMap<String, JsonObject>> mapAtomicf;
+
 	private static kafkaWriteUtil writer;
-	
-	public static  void packetMergeStrat(){
-		
-		//init
+
+	public static void packetMergeStrat() {
+
+		// init
+		mapAtomicf = new AtomicReference<HashMap<String, JsonObject>>();
+		mapAtomicf.set(new HashMap<String, JsonObject>());
 		ConcurrentLinkedQueue<JsonArray> queue = new ConcurrentLinkedQueue<JsonArray>();
 		packetProducer = new PacketProducer(queue);
-		packetMerge=new PacketMerge(queue);
-		
-		MergeProcessor processor = new TCPMergeProcessorImp();
-		packetMerge.register("", processor, true);
-		
-		mapAtomicf = new AtomicReference<HashMap<String,JsonObject>>();
-		mapAtomicf.set(new HashMap<String,JsonObject>());
-		
-		//execute
+		packetMerge = new PacketMerge(queue, mapAtomicf);
+
+		MergeProcessor processor = new TestMergeProcessorImp();
+		packetMerge.register("tcp", processor, true, new SessionFingermark());
+
+		writer = new kafkaWriteUtil();
+
+		// execute
 		packetProcessorPool.execute(packetProducer);
 		packetProcessorPool.execute(packetMerge);
-		dataSender.scheduleAtFixedRate(new PktSender(mapAtomicf,writer),0,1000,TimeUnit.MILLISECONDS );
+		dataSender.scheduleAtFixedRate(new PktSender(mapAtomicf, writer), 0, 1000, TimeUnit.MILLISECONDS);
 	}
-	
-	public static void close(){
+
+	public static void close() {
 		packetProducer.close();
 		packetMerge.close();
 		packetProcessorPool.shutdownNow();
 		dataSender.shutdownNow();
 		writer.close();
 	}
+
 	public static void main(String[] args) {
 		packetMergeStrat();
 	}

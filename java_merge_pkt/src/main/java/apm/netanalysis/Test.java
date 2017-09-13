@@ -1,33 +1,67 @@
 package apm.netanalysis;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
 
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-import apm.netanalysis.info.KafkaInfo;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 
 public class Test {
 
 	public static void main(String[] args) {
-		Properties props;
+		/*Properties props = new Properties();
+		 props.put("bootstrap.servers", "localhost:9092");
+		 props.put("acks", "all");
+		 props.put("retries", 0);
+		 props.put("batch.size", 16384);
+		 props.put("linger.ms", 1);
+		 props.put("buffer.memory", 33554432);
+		 props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+		 props.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+		 Producer<String, String> producer = new KafkaProducer<>(props);
+		 for(int i = 0; i < 100; i++)
+		 {
+			 System.out.println("send ");
+			 producer.send(new ProducerRecord<String,String>(
+						KafkaInfo.getWriteTopic(),"test test"
+						),new Callback(){
+							@Override
+							public void onCompletion(RecordMetadata metaData, Exception exception) {
+								
+									if(exception != null){
+										exception.printStackTrace();
+										//log.error(exception.getMessage());
+									}else{
+										System.out.println("send kafka success");
+									//	log.info("send kafka success");
+									}
+							}
+					
+				});
+		 }
+
+		 producer.close();*/
 		
-		props = new Properties();
-		props.put("bootstrap.servers", KafkaInfo.getReadAddr());
-	     props.put("group.id", "netanalysis");
-	     props.put("enable.auto.commit", "true");
-	     props.put("auto.commit.interval.ms", "1000");
-	     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-	     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
-	     KafkaConsumer<String,String>    consumer = new KafkaConsumer<String,String>(props);
+		JsonArray ja = new JsonArray();
+		JsonObject jo =  new JsonObject();
+		jo.addProperty("aaa", "bbb");
+		JsonElement je = jo;
+		ja.add(je);
+		System.out.println(" $$$$ "+ja.toString());
+	   /*  KafkaConsumer<String,String>    consumer = new KafkaConsumer<String,String>(props);
 	     consumer.subscribe(Arrays.asList(KafkaInfo.getReadTopic()));
 	     
 	     List<String> list = new LinkedList<String>();
-			ConsumerRecords<String,String> records = consumer.poll(100);
+	    Map<String,List<PartitionInfo>>  map = consumer.listTopics();
+	    
+	    map.forEach((k,v)->{
+	    	System.out.println("key "+k+"\n\r"+v.toString());
+	    });
+	    
+	     System.out.println("start");
+			ConsumerRecords<String,String> records = consumer.poll(Integer.MAX_VALUE);
 			System.out.println("$$$$$$$$");
 			if(records==null || records.isEmpty())
 				System.out.println("&&&&&& is NULL NULL NULL");
@@ -41,7 +75,8 @@ public class Test {
 					System.out.println(" null null");
 				}
 			}
-
+			*/
+	     
 	}
 
 }
