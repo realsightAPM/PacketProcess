@@ -45,7 +45,7 @@ class capturePkt(multiprocessing.Process):
         return pkt_dst
 
     def run(self):
-        #cap = pyshark.LiveCapture(interface=self.interface_name,only_summaries=True,keep_packets=False)
+        #cap = pyshark.LiveCapture(interface=self.interface_name,only_summaries=True)
         cap = pyshark.FileCapture("/Users/zyd/apm/file2.cap",only_summaries=True,keep_packets=False)
         cap.apply_on_packets(self.__add_pkt)
 

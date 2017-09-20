@@ -3,6 +3,6 @@
 原地址 IP：source
 目的地址 IP: destination
 协议：protocol
-抓取到数据包的时间：time
+抓取到数据包的时间：snifftime
 RTT: rtt
 
