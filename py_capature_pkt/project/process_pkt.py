@@ -7,15 +7,17 @@ from kafka import KafkaProducer
 
 class processPkt(multiprocessing.Process):
 
-    def __init__(self,out_pipe,processors=None):
+    def __init__(self,out_pipe,pkt_fingerprint_dst=None,has_repetition=False):
         multiprocessing.Process.__init__(self)
         self.out_pipe = out_pipe
-        self.processors = processors
         self.pkt_id = 0
-        self.bloomFilter = BloomFilter.MyBloomFilter()
+        if has_repetition:
+            self.bloomFilter = BloomFilter.MyBloomFilter()
+            self.pkt_fingerprint_dst = pkt_fingerprint_dst
         self.topic = "netpacket"
         self.queue = []
-        print "init finish"
+        self.has_repetition = has_repetition
+        
 
     def run(self):
         start = time.time()
@@ -34,23 +36,26 @@ class processPkt(multiprocessing.Process):
         """
         把数据解析处理，然后返回可以直接推送入kafka的数据
         """
-        value = []
-        value.append(''.join(pkt_dst['time']))
-        value.append(''.join(pkt_dst['destination']))
-        value.append(''.join(pkt_dst['source']))
-        value.append(''.join(pkt_dst['protocol']))
-        if(self.bloomFilter.contains(''.join(value))):
-            return
-        else:
-            self.queue.append(pkt_dst)
-            if(len(self.queue) > 100):
-                data = json.dumps(self.queue)
-                future = self.producer.send("netpacket",data)
-                print "send data"
-                result = future.get(timeout=10)
-                print "send success"
-                print result
-                self.queue=[]
+        if(self.has_repetition):
+            value = self.__get_pkt_fingerprint(pkt_dst)
+            if self.bloomFilter.contains(value):
+                return
+        self.queue.append(pkt_dst)
+        if(len(self.queue) > 100):
+            data = json.dumps(self.queue)
+            future = self.producer.send("netpacket",data)
+            print "send data"
+            result = future.get(timeout=10)
+            print "send success"
+            print result
+            self.queue=[]
+
+    def __get_pkt_fingerprint(self,pkt_dst):
+        field_list = self.pkt_fingerprint_dst
+        value = ""
+        if field_list is not None:
+            value = [value.append(pkt_dst[field] for field in field_list)]
+        return value
 
 
 

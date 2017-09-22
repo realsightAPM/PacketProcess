@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 public class Test {
 
 	public static void main(String[] args) {
+		
+		
 		/*Properties props = new Properties();
 		 props.put("bootstrap.servers", "localhost:9092");
 		 props.put("acks", "all");
@@ -44,12 +46,12 @@ public class Test {
 
 		 producer.close();*/
 		
-		JsonArray ja = new JsonArray();
+	/*	JsonArray ja = new JsonArray();
 		JsonObject jo =  new JsonObject();
 		jo.addProperty("aaa", "bbb");
 		JsonElement je = jo;
 		ja.add(je);
-		System.out.println(" $$$$ "+ja.toString());
+		System.out.println(" $$$$ "+ja.toString());*/
 	   /*  KafkaConsumer<String,String>    consumer = new KafkaConsumer<String,String>(props);
 	     consumer.subscribe(Arrays.asList(KafkaInfo.getReadTopic()));
 	     

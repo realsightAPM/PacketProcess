@@ -1,8 +1,41 @@
+／*
+python pyshark读取 数据包中的各个字段
+*／
+#######################################
+该部分主要说明的是各个字段如何从pkt对象中获得，pkt对象表示了一个数据包
+
+协议：protocol:pkt.protocol
+往返时间：RTT:pkt.tcp.analysis_ack_rtt ##该字段仅仅适用于tcp协议
+数据包长度：length:pkt.length
+时间戳: sniff_timestamp:pkt.sniff_timestamp
+
+pkt主要字段说明：
+layers是一个数组可以通过数字下标来获取制定层的数据
+pkt[pkt.highest_layer]是获取每层协议对应数据的比较好的方式，通常是查看最高层的
+
+获取负载数据payload:
+mydata = pkt[pkt.highest_layer].data
+mydata.decode("hex")
+
+########################################
+
 从数据包中解析出的数据在json格式中的key
 
-原地址 IP：source
-目的地址 IP: destination
-协议：protocol
-抓取到数据包的时间：snifftime
-RTT: rtt
+原地址 IP：source_ip 获取方法 pkt.ip.src
+
+目的地址 IP: destination_ip 获取方法 pkt.ip.dst
+
+最高层协议：protocol 获取方法 pkt.highest_layer
+
+抓取到数据包的时间：snifftime 获取方法  pkt.sniff_timestamp
+
+RTT: rtt  获取方法   pkt.tcp.analysis_ack_rtt
+
+原端口:source_port   获取方法 pkt[pkt.transport_layer].srcport
+
+目的端口号:destinaition_port 获取方法 pkt[pkt.transport_layer].dstport
+获取负载数据:payload 
+获取方法
+mydata = pkt[pkt.highest_layer].data
+mydata.decode("hex")
 

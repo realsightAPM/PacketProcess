@@ -1,4 +1,74 @@
-summary:
+
+TCP读取的数据包:
+Packet (Length: 56)
+Layer NULL:
+	Family: IP (2)
+Layer IP:
+	Source GeoIP: Unknown
+	..0. .... = More fragments: Not set
+	Time to live: 64
+	0100 .... = Version: 4
+	.1.. .... = Don't fragment: Set
+	Flags: 0x02 (Don't Fragment)
+	Differentiated Services Field: 0x00 (DSCP: CS0, ECN: Not-ECT)
+	Identification: 0x7999 (31129)
+	Header checksum: 0x0000 [validation disabled]
+	.... ..00 = Explicit Congestion Notification: Not ECN-Capable Transport (0)
+	.... 0101 = Header Length: 20 bytes (5)
+	Destination: 127.0.0.1
+	0000 00.. = Differentiated Services Codepoint: Default (0)
+	Fragment offset: 0
+	0... .... = Reserved bit: Not set
+	Total Length: 52
+	Source: 127.0.0.1
+	Header checksum status: Unverified
+	Protocol: TCP (6)
+	Destination GeoIP: Unknown
+Layer TCP:
+	.... ..0. .... = Urgent: Not set
+	Acknowledgment number: 2    (relative ack number)
+	TCP Option - No-Operation (NOP)
+	Stream index: 28
+	Checksum Status: Unverified
+	Sequence number: 2    (relative sequence number)
+	iRTT: 0.000069000 seconds
+	TCP Segment Len: 0
+	000. .... .... = Reserved: Not set
+	TCP Option - Timestamps: TSval 200988319, TSecr 200988319
+	Length: 10
+	SEQ/ACK analysis
+	The RTT to ACK the segment was: 0.000028000 seconds
+	1000 .... = Header Length: 32 bytes (8)
+	Destination Port: 9696
+	.... .... 0... = Push: Not set
+	Calculated window size: 408288
+	...0 .... .... = Nonce: Not set
+	.... ...1 .... = Acknowledgment: Set
+	TCP Flags: \xc2\xb7\xc2\xb7\xc2\xb7\xc2\xb7\xc2\xb7\xc2\xb7\xc2\xb7A\xc2\xb7\xc2\xb7\xc2\xb7\xc2\xb7
+	.... .... ...0 = Fin: Not set
+	Kind: No-Operation (1)
+	Window size scaling factor: 32
+	Window size value: 12759
+	Options: (12 bytes), No-Operation (NOP), No-Operation (NOP), Timestamps
+	Flags: 0x010 (ACK)
+	.... .0.. .... = ECN-Echo: Not set
+	Source Port: 61667
+	Checksum: 0xfe28 [unverified]
+	This is an ACK to the segment in frame: 184
+	Urgent pointer: 0
+	Timestamp value: 200988319
+	.... .... ..0. = Syn: Not set
+	.... 0... .... = Congestion Window Reduced (CWR): Not set
+	.... .... .0.. = Reset: Not set
+	Timestamp echo reply: 200988319
+	TCP Option - No-Operation (NOP)
+	Kind: No-Operation (1)
+	Kind: Time Stamp Option (8)
+
+
+
+摘要版：
+python 对象包含的属性
 ['__class__', '__delattr__', '__dict__', '__doc__', '__format__', '__getattribute__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_field_order', '_fields', 'destination', 'info', 'length', 'no', 'protocol', 'source', 'summary_line', 'time']
 
 summary_line:
