@@ -24,7 +24,7 @@ public class GraphController {
 		
 		private Logger log = LoggerFactory.getLogger(GraphController.class);
 		
-		@RequestMapping(value="/say",method=RequestMethod.GET)  
+		@RequestMapping(value="/graphJsonData",method=RequestMethod.GET)  
 	    @ResponseBody 
 		public ResponseMessage getGraph(long startTime,long endTime){
 			ResponseMessage responseMessage = new ResponseMessage();

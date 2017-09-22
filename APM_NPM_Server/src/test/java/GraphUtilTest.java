@@ -4,10 +4,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import src.solrUtil.SolrReader;
+
 
 public class GraphUtilTest {
-
+/*
 	@Test
 	public void testSolrReader(){
 		SolrReader sr = new SolrReader();
@@ -23,7 +23,7 @@ public class GraphUtilTest {
 		while(sr.hasNextResponse()){
 			System.out.println("has next");
 			System.out.println(sr.nextResponse());
-		}
+		}*/
 		/*
 		System.out.println("@$@#$@#$#");
 		Map<String,Long> map = sr.getFacetResult();
@@ -32,5 +32,5 @@ public class GraphUtilTest {
 		});
 		*/
 		
-	}
+//	}
 }

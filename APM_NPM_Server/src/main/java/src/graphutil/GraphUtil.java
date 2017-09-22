@@ -1,16 +1,12 @@
 package src.graphutil;
 
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
 import src.mode.Edge;
-import src.mode.Graph;
 import src.mode.Metadata;
 import src.mode.Node;
-import src.solrUtil.SolrReader;
 import src.solrUtil.SolrReaderUtil;
 import src.solrUtil.TimeUtil;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -33,7 +29,7 @@ public class GraphUtil implements InitializingBean{
 	@Value("${edgeSource}")
 	private String edgeSource;//原端
 	
-	@Value("${edgeSource}")
+	@Value("${edgeDestination}")
 	private String edgeDestination;//目的端
 	
 	@Value("${sniffTime}")
@@ -47,7 +43,7 @@ public class GraphUtil implements InitializingBean{
 	
 	private String[] edgeSource_Destination;
 	
-	private Logger log = LoggerFactory.getLogger(SolrReader.class);
+	private Logger log = LoggerFactory.getLogger(GraphUtil.class);
 	
 	@Override
 	public void afterPropertiesSet() throws Exception {
@@ -135,7 +131,7 @@ public class GraphUtil implements InitializingBean{
 	 * 时间转换
 	 */
 	private String timeQuery(long startTime,long endTime){
-		String startTimeStr = "["+timeUtil.formatUnixtime2(startTime)+" "+"TO"+
+		String startTimeStr =this.sniffTime+":"+ "["+timeUtil.formatUnixtime2(startTime)+" "+"TO"+
 				" "+timeUtil.formatUnixtime2(endTime) +"]";
 		return startTimeStr;
 	}
