@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import src.globalinfo.ResponseCode;
@@ -26,7 +27,7 @@ public class GraphController {
 		
 		@RequestMapping(value="/graphJsonData",method=RequestMethod.GET)  
 	    @ResponseBody 
-		public ResponseMessage getGraph(long startTime,long endTime){
+		public ResponseMessage getGraph(@RequestParam long startTime,@RequestParam long endTime){
 			ResponseMessage responseMessage = new ResponseMessage();
 			if(startTime <0 || endTime <0 || startTime>= endTime){
 				responseMessage.setCode(ResponseCode.FAIL.getCode());

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ROOT>
+    <Protocol>
+        <protocol_name>TCP</protocol_name>
+        <server_name>TEST</server_name>
+        <source_server name="TEST">
+	        <field>
+	        		<key>source_ip</key>
+	        		<value>192.168.1.1</value>
+	        </field>
+	        <field>
+		        <key>source_port</key>
+		        <value>8080</value>
+	        </field>
+	        </source_server>
+	       <destination_server name="TEST123">
+	        <field>
+		        <key>destination_ip</key>
+		        <value>192.168.1.2</value>
+	        </field>
+	        
+	        <field>
+		        <key>destinaition_port</key>
+		        <value>8015</value>
+	        </field>
+        </destination_server>
+    </Protocol>
+    
+</ROOT>

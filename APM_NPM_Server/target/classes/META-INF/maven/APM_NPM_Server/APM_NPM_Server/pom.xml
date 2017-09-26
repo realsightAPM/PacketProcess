@@ -70,6 +70,22 @@
 	    <version>0.11.0.0</version>
 	</dependency>
 	
+	<!-- https://mvnrepository.com/artifact/org.beanone/xmapper -->
+	<!-- https://mvnrepository.com/artifact/com.sun.xml.bind/jaxb-impl -->
+	<dependency>
+	    <groupId>com.sun.xml.bind</groupId>
+	    <artifactId>jaxb-impl</artifactId>
+	    <version>2.3.0</version>
+	</dependency>
+	
+	<!-- https://mvnrepository.com/artifact/org.dom4j/dom4j -->
+<dependency>
+    <groupId>org.dom4j</groupId>
+    <artifactId>dom4j</artifactId>
+    <version>2.0.0</version>
+</dependency>
+	
+	
 </dependencies>
 
 </project>
