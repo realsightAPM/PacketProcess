@@ -3,6 +3,10 @@ package src.netanalysis.merge;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -12,19 +16,19 @@ import src.netanalysis.kafkautils.kafkaWriteUtil;
 /*
  * 负责将数据定时发送给kafka
  */
-
-public class PktSender implements Runnable {
+@Component
+public class PktSender implements Runnable ,DisposableBean{
 
 	/*
 	 * 保存一秒内的统计信息
 	 */
 	private AtomicReference<HashMap<String, JsonObject>> mapAtomicf;
 
+	@Autowired
 	private kafkaWriteUtil writer;
 
-	public PktSender(AtomicReference<HashMap<String, JsonObject>> mapAtomicf, kafkaWriteUtil writer) {
+	public void setMapAtomicf(AtomicReference<HashMap<String, JsonObject>> mapAtomicf){
 		this.mapAtomicf = mapAtomicf;
-		this.writer = writer;
 	}
 
 	/*
@@ -34,6 +38,7 @@ public class PktSender implements Runnable {
 	 */
 	@Override
 	public void run() {
+		System.out.println("Send Data");
 		HashMap<String, JsonObject> olderMap = mapAtomicf.get();
 		if (olderMap.isEmpty()) {
 			return;
@@ -58,8 +63,9 @@ public class PktSender implements Runnable {
 		});
 		return result.toString();
 	}
-
-	public void close() {
+	
+	@Override
+	public void destroy() throws Exception {
 		this.writer.close();
 	}
 

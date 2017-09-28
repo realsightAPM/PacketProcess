@@ -25,3 +25,6 @@ def get_destinaition_port(pkt):
 
 def get_protocol(pkt):
     return pkt.highest_layer
+
+def get_length(pkt):
+    return pkt.length

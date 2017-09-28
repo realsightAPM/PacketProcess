@@ -4,6 +4,7 @@ import time
 import BloomFilter
 import json
 from kafka import KafkaProducer
+import traceback
 
 class processPkt(multiprocessing.Process):
 
@@ -21,7 +22,10 @@ class processPkt(multiprocessing.Process):
 
     def run(self):
         start = time.time()
-        self.producer = KafkaProducer(bootstrap_servers='10.4.53.25:9092')
+        try:
+            self.producer = KafkaProducer(bootstrap_servers='10.4.53.25:9092')
+        except Exception,e:
+            traceback.print_exc(e)
         while True:
                 pkts = self.out_pipe.recv()
                 pkt_dst = json.loads(pkts)
@@ -44,7 +48,7 @@ class processPkt(multiprocessing.Process):
         if(len(self.queue) > 100):
             data = json.dumps(self.queue)
             future = self.producer.send("netpacket",data)
-            print "send data"
+            #print "send data"
             result = future.get(timeout=10)
             print "send success"
             print result

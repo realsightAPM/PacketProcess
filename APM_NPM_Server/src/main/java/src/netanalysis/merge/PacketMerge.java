@@ -6,6 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonArray;
@@ -24,6 +25,8 @@ public class PacketMerge implements Runnable {
 	private ConcurrentLinkedQueue<JsonArray> queue;
 	private boolean shutdown;
 
+	@Autowired
+	private PacketServerTranslate pst;
 	/*
 	 * 保存一秒内的统计信息
 	 */
@@ -36,7 +39,8 @@ public class PacketMerge implements Runnable {
 	 */
 	private HashMap<String, MergeProcessor> megerProcessors = new HashMap<String, MergeProcessor>();
 
-	private HashMap<String, SessionFingermark> sesionConfig = new HashMap<String, SessionFingermark>();
+	@Autowired
+	private SessionFingermark sesionConfig;
 
 	public void init(ConcurrentLinkedQueue<JsonArray> queue,
 			AtomicReference<HashMap<String, JsonObject>> mapAtomicf) {
@@ -53,6 +57,7 @@ public class PacketMerge implements Runnable {
 			JsonObject pktJO = pkt.getAsJsonObject();
 			String sessionFingermark;
 			try {
+				pktJO = pst.packetToApplication(pktJO);
 				sessionFingermark = getSessionFingermark(pktJO);
 				add(sessionFingermark, pktJO);
 			} catch (Exception e) {
@@ -69,14 +74,12 @@ public class PacketMerge implements Runnable {
 		if (color == null) {
 			log.error("color is null sessionkey is " + key);
 		}
-		MergeProcessor processor = megerProcessors.get(color);
+		MergeProcessor processor = megerProcessors.get(color.toUpperCase());
 		if (processor == null) {
 			log.error("color  " + color + " no Mergeprocessor");
 		}
 		Map<String, JsonObject> map = mapAtomicf.get();
 		JsonObject statisticInfo = map.get(key);
-		if (statisticInfo == null)
-			statisticInfo = new JsonObject();
 		statisticInfo = processor.mergerPkt(pkt, statisticInfo);
 		map.put(key, statisticInfo);
 	}
@@ -86,9 +89,9 @@ public class PacketMerge implements Runnable {
 	 */
 	private String getSessionFingermark(JsonObject pkt) throws Exception {
 		String color = pkt.get(PktInfo.COLOR.getValue()).getAsString();
-		SessionFingermark sfm = sesionConfig.get(color);
+		
 		StringBuilder sb = new StringBuilder();
-		for (String field : sfm.getFiledsList()) {
+		for (String field : sesionConfig.getFiledsList()) {
 			if (pkt.get(field) == null) {
 				throw new Exception("the field of SessionFingermark not exits " + pkt.get(color));
 			} else {
@@ -108,19 +111,21 @@ public class PacketMerge implements Runnable {
 			pktInfoList = queue.poll();
 			if (pktInfoList != null) {
 				merge(pktInfoList);
+			}else{
+				log.debug("pkt info list is null");
 			}
 		}
 	}
 
 	public boolean register(String color, MergeProcessor processor, boolean cover, SessionFingermark sfm) {
 		if (cover) {
-			sesionConfig.put(color, sfm);
+			sesionConfig = sfm;
 			megerProcessors.put(color, processor);
 			return true;
 		} else {
 			if (megerProcessors.containsKey(color))
 				return false;
-			sesionConfig.put(color, sfm);
+			sesionConfig= sfm;
 			megerProcessors.put(color, processor);
 			return true;
 		}

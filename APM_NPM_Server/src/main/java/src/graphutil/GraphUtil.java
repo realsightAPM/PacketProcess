@@ -10,7 +10,7 @@ import src.mode.Node;
 import src.solrUtil.SolrReaderUtil;
 import src.solrUtil.TimeUtil;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.assertj.core.util.Sets;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.gson.JsonObject;
 
 @Service

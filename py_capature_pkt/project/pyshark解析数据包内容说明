@@ -99,3 +99,116 @@ time:
 0.000654000
 >>> 
 
+
+
+HTTP数据包：
+
+dir(pkt):
+
+
+['__class__', '__contains__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getitem__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_packet_string', 'captured_length', 'data', 'eth', 'frame_info', 'get_multiple_layers', 'highest_layer', 'http', 'interface_captured', 'ip', 'layers', 'length', 'number', 'pretty_print', 'sniff_time', 'sniff_timestamp', 'tcp', 'transport_layer']
+
+
+
+dir(pkt.http)
+['', 'DATA_LAYER', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_all_fields', '_field_prefix', '_get_all_field_lines', '_get_all_fields_with_alternates', '_get_field_or_layer_repr', '_get_field_repr', '_layer_name', '_sanitize_field_name', '_ws_expert', '_ws_expert_group', '_ws_expert_message', '_ws_expert_severity', 'accept', 'accept_encoding', 'accept_language', 'chat', 'cookie', 'cookie_pair', 'field_names', 'get', 'get_field', 'get_field_by_showname', 'get_field_value', 'host', 'layer_name', 'pretty_print', 'prev_request_in', 'raw_mode', 'referer', 'request', 'request_full_uri', 'request_line', 'request_method', 'request_number', 'request_uri', 'request_uri_path', 'request_uri_query', 'request_uri_query_parameter', 'request_version', 'user_agent']
+
+
+dir(pkt.tcp)
+
+['DATA_LAYER', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_all_fields', '_field_prefix', '_get_all_field_lines', '_get_all_fields_with_alternates', '_get_field_or_layer_repr', '_get_field_repr', '_layer_name', '_sanitize_field_name', 'ack', 'analysis', 'analysis_bytes_in_flight', 'analysis_initial_rtt', 'analysis_push_bytes_sent', 'checksum', 'checksum_status', 'dstport', 'field_names', 'flags', 'flags_ack', 'flags_cwr', 'flags_ecn', 'flags_fin', 'flags_ns', 'flags_push', 'flags_res', 'flags_reset', 'flags_str', 'flags_syn', 'flags_urg', 'get', 'get_field', 'get_field_by_showname', 'get_field_value', 'hdr_len', 'layer_name', 'len', 'nxtseq', 'payload', 'port', 'pretty_print', 'raw_mode', 'segment_data', 'seq', 'srcport', 'stream', 'urgent_pointer', 'window_size', 'window_size_scalefactor', 'window_size_value']
+
+
+
+DATALayer HTTP:
+	GET /6/B/9/2_bobbob32.jpg HTTP/1.1\r\n
+	Cookie pair: uuid_tt_dd=-4091559627897223220_20170629
+	Host: avatar.csdn.net\r\n
+	Referer: http://blog.csdn.net/aflyeaglenku/article/details/50884296\r\n
+	Expert Info (Chat/Sequence): GET /6/B/9/2_bobbob32.jpg HTTP/1.1\r\n
+	Accept-Encoding: gzip, deflate\r\n
+	Accept-Language: zh-CN,zh;q=0.8,en;q=0.6\r\n
+	HTTP request 1/1
+	Request URI: /6/B/9/2_bobbob32.jpg
+	Request Version: HTTP/1.1
+	Full request URI: http://avatar.csdn.net/6/B/9/2_bobbob32.jpg
+	GET /6/B/9/2_bobbob32.jpg HTTP/1.1\r\n
+	 [truncated]Cookie: uuid_tt_dd=-4091559627897223220_20170629; UserName=Owen9; UserInfo=5XdDnkr%2BF2t1fUzsU4q44nVQI3CtM2ef3NfqXgSKDCo%2Bdh63bAjK37HyOmxUB%2Fp4nSWwA6KPbHEuIlU87zHRWEWC1qMWqrZNFnqrz8JAb%2BUXRnTJoxVxmXb6tdk1Du6U; UserNick=Owen9
+	Group: Sequence
+	Severity level: Chat
+	Request Method: GET
+	User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36\r\n
+	Accept: image/webp,image/apng,image/*,*/*;q=0.8\r\n
+	\r\n
+	Cookie pair: UserName=Owen9
+	Cookie pair: UserInfo=5XdDnkr%2BF2t1fUzsU4q44nVQI3CtM2ef3NfqXgSKDCo%2Bdh63bAjK37HyOmxUB%2Fp4nSWwA6KPbHEuIlU87zHRWEWC1qMWqrZNFnqrz8JAb%2BUXRnTJoxVxmXb6tdk1Du6U
+	Cookie pair: UserNick=Owen9
+	Cookie pair: AU=196
+	Cookie pair: UN=Owen9
+	Cookie pair: UE="1366332367@qq.com"
+	Cookie pair: BT=1502335129709
+	Cookie pair: access-token=0244c970-4c29-4348-9a26-708fb378b430
+	Cookie pair: __message_sys_msg_id=0
+	Cookie pair: __message_gu_msg_id=0
+	Cookie pair: __message_cnel_msg_id=0
+	Cookie pair: __message_in_school=0
+	Cookie pair: UM_distinctid=15ea4c26bdf2d0-07aa6e1073449-31637e01-13c680-15ea4c26be0316
+	Cookie pair: __utma=17226283.199524843.1505891876.1506308475.1506404434.4
+	Cookie pair: __utmc=17226283
+	Cookie pair: __utmz=17226283.1506404434.4.4.utmcsr=my.csdn.net|utmccn=(referral)|utmcmd=referral|utmcct=/Owen9
+	Cookie pair: dc_session_id=1501805310182_0.48481318739774215
+	Cookie pair: Hm_lvt_6bcd52f51e9b3dce32bec4a3997715ac=1506409560,1506410534,1506421053,1506474172
+	Cookie pair: Hm_lpvt_6bcd52f51e9b3dce32bec4a3997715ac=1506474172
+	Proxy-Connection: keep-alive\r\n
+
+
+
+
+
+
+	Layer HTTP:
+	HTTP/1.1 302 Moved Temporarily\r\n
+	Request Version: HTTP/1.1
+	Response Phrase: Moved Temporarily
+	Location: http://noavatar.csdn.net/1/9/9/2_swanabin.jpg\r\n
+	Time since request: 0.062566000 seconds
+	Content length: 0
+	Date: Fri, 08 Sep 2017 09:16:53 GMT\r\n
+	HTTP response 2/2
+	Request in frame: 902
+	Connection: keep-alive\r\n
+	Expert Info (Chat/Sequence): HTTP/1.1 302 Moved Temporarily\r\n
+	Group: Sequence
+	Severity level: Chat
+	Status Code Description: Found
+	Status Code: 302
+	Server: Tengine\r\n
+	Content-Type: image/jpeg\r\n
+	Prev request in frame: 716
+	HTTP/1.1 302 Moved Temporarily\r\n
+	Content-Length: 0\r\n
+	\r\n
+	x-oss-request-id: 59B260050CC2B0287D5FBC86\r\n
+	Via: cache20.l2nu20-1[0,302-0,H], cache22.l2nu20-1[0,0], kunlun1.cn335[0,302-0,H], kunlun2.cn335[17,0]\r\n
+	Age: 1611961\r\n
+	X-Cache: HIT TCP_HIT dirn:6:17171031 mlen:-1\r\n
+	X-Swift-SaveTime: Thu, 14 Sep 2017 02:51:23 GMT\r\n
+	X-Swift-CacheTime: 93312000\r\n
+	Access-Control-Allow-Origin: http://my.csdn.net\r\n
+	Timing-Allow-Origin: *\r\n
+	EagleId: da3c778215064741742682199e\r\n
+
+
+
+HTTP数据包分为HTTP和data
+可以通过
+pkt[3].layer_name来进行区分
+
+dir(pkt[3])
+['DATA_LAYER', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_all_fields', '_field_prefix', '_get_all_field_lines', '_get_all_fields_with_alternates', '_get_field_or_layer_repr', '_get_field_repr', '_layer_name', '_sanitize_field_name', 'data', 'data_data', 'data_len', 'field_names', 'get', 'get_field', 'get_field_by_showname', 'get_field_value', 'layer_name', 'pretty_print', 'raw_mode']
+
+['', 'DATA_LAYER', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_all_fields', '_field_prefix', '_get_all_field_lines', '_get_all_fields_with_alternates', '_get_field_or_layer_repr', '_get_field_repr', '_layer_name', '_sanitize_field_name', '_ws_expert', '_ws_expert_group', '_ws_expert_message', '_ws_expert_severity', 'accept', 'accept_encoding', 'accept_language', 'chat', 'connection', 'field_names', 'get', 'get_field', 'get_field_by_showname', 'get_field_value', 'host', 'layer_name', 'pretty_print', 'raw_mode', 'referer', 'request', 'request_full_uri', 'request_line', 'request_method', 'request_number', 'request_uri', 'request_uri_path', 'request_uri_query', 'request_uri_query_parameter', 'request_version', 'user_agent']
+
+
+['', 'DATA_LAYER', '__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__format__', '__getattr__', '__getattribute__', '__getstate__', '__hash__', '__init__', '__module__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', '_all_fields', '_field_prefix', '_get_all_field_lines', '_get_all_fields_with_alternates', '_get_field_or_layer_repr', '_get_field_repr', '_layer_name', '_sanitize_field_name', '_ws_expert', '_ws_expert_group', '_ws_expert_message', '_ws_expert_severity', 'cache_control', 'chat', 'chunk_size', 'content_type', 'date', 'field_names', 'file_data', 'get', 'get_field', 'get_field_by_showname', 'get_field_value', 'layer_name', 'pretty_print', 'raw_mode', 'request_in', 'request_version', 'response', 'response_code', 'response_code_desc', 'response_line', 'response_number', 'response_phrase', 'server', 'subdissector_failed', 'time', 'transfer_encoding']
+

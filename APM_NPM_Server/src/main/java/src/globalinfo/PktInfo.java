@@ -1,8 +1,10 @@
 package src.globalinfo;
 
 public enum PktInfo {
-	COLOR("color"),
-	INFO("info");
+	COLOR("protocol"),
+	INFO("info"),
+	SOURCE_SERVER_NAME("source_server_name"),
+	DISTINATION_SERVER_NAME("destination_server_name");
 	private final String value;
 	
 	PktInfo(String value){

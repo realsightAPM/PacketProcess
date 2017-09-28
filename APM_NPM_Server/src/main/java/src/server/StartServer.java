@@ -17,11 +17,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import src.globalinfo.SessionFingermark;
-import src.netanalysis.kafkautils.kafkaWriteUtil;
 import src.netanalysis.merge.MergeProcessor;
 import src.netanalysis.merge.PacketMerge;
 import src.netanalysis.merge.PktSender;
-import src.netanalysis.merge.TestMergeProcessorImp;
+import src.netanalysis.merge.TCPMergeProcessorImp;
 import src.netanalysis.producer.PacketProducer;
 
 @Service
@@ -36,10 +35,10 @@ public class StartServer implements  InitializingBean,DisposableBean{
 	@Autowired
 	private  PacketMerge packetMerge;
 
-	private  AtomicReference<HashMap<String, JsonObject>> mapAtomicf;
-
 	@Autowired
-	private  kafkaWriteUtil writer;
+	private PktSender ps;
+	
+	private  AtomicReference<HashMap<String, JsonObject>> mapAtomicf;
 
 	public  void packetMergeStrat() {
 
@@ -50,16 +49,16 @@ public class StartServer implements  InitializingBean,DisposableBean{
 		packetProducer.setDataCache(queue);
 		packetMerge.init(queue, mapAtomicf);
 
-		MergeProcessor processor = new TestMergeProcessorImp();
-		packetMerge.register("tcp", processor, true, new SessionFingermark());
-
-		
-		writer = new kafkaWriteUtil();
+		//注册合并处理的processor
+		MergeProcessor processor = new TCPMergeProcessorImp();
+		packetMerge.register("TCP", processor, true, new SessionFingermark());
 
 		// execute
 		packetProcessorPool.execute(packetProducer);
 		packetProcessorPool.execute(packetMerge);
-		dataSender.scheduleAtFixedRate(new PktSender(mapAtomicf, writer), 0, 1000, TimeUnit.MILLISECONDS);
+		
+		ps.setMapAtomicf(mapAtomicf);
+		dataSender.scheduleAtFixedRate(ps, 0, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	public  void close() {
@@ -67,7 +66,6 @@ public class StartServer implements  InitializingBean,DisposableBean{
 		packetMerge.close();
 		packetProcessorPool.shutdownNow();
 		dataSender.shutdownNow();
-		writer.close();
 	}
 	
 	@Override

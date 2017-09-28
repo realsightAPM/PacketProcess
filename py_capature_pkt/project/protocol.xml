@@ -8,9 +8,6 @@
         <parameter>snifftime</parameter>
         <parameter>source_port</parameter>
         <parameter>destinaition_port</parameter>
+        <parameter>length</parameter>
      </protocol>
-     <protocol>
-        <name>HTTP</name>
-        <parameter>rtt</parameter>
-    </protocol>
 </root>

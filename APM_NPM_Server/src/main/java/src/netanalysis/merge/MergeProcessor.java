@@ -1,22 +1,11 @@
 package src.netanalysis.merge;
 
-import java.util.List;
 
 import com.google.gson.JsonObject;
 
-public abstract class MergeProcessor {
+public interface MergeProcessor {
 
-	// 存储包含的字段
-	private List<String> fileds;
+	 JsonObject mergerPkt(JsonObject pkt, JsonObject statisticInfo);
 
-	abstract public JsonObject mergerPkt(JsonObject pkt, JsonObject statisticInfo);
-
-	public List<String> getFileds() {
-		return fileds;
-	}
-
-	public void setFileds(List<String> fileds) {
-		this.fileds = fileds;
-	}
 
 }

@@ -37,7 +37,6 @@ public class kafkaWriteUtil implements InitializingBean,AutoCloseable,Disposable
 					exception.printStackTrace();
 					log.error(exception.getMessage());
 				} else {
-					System.out.println("send kafka success");
 					log.info("send kafka success");
 				}
 			}

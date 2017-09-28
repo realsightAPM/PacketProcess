@@ -15,8 +15,8 @@ writer = capture_pkt.capturePkt(in_pipe,'lo0',protocol_parser_dst)
 
 reader = process_pkt.processPkt(output_pipe)
 
-writer.daemon = True
-reader.daemon = True
+#writer.daemon = True
+#reader.daemon = True
 writer.start()
 reader.start()
 reader.join()

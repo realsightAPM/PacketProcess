@@ -23,7 +23,7 @@ public class GraphController {
 		@Autowired
 		private GraphUtil graphUtil;
 		
-		private Logger log = LoggerFactory.getLogger(GraphController.class);
+		private static Logger log = LoggerFactory.getLogger(GraphController.class);
 		
 		@RequestMapping(value="/graphJsonData",method=RequestMethod.GET)  
 	    @ResponseBody 

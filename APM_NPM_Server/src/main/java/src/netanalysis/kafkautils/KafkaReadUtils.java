@@ -8,11 +8,12 @@ import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import src.globalinfo.KafkaInfo;
 
 @Component
@@ -21,6 +22,8 @@ public class KafkaReadUtils implements InitializingBean,AutoCloseable,Disposable
 	private Properties props;
 
 	private KafkaConsumer<String, String> consumer;
+	
+	private static Logger log = LoggerFactory.getLogger(KafkaReadUtils.class);
 
 	@Autowired
 	private KafkaInfo kafkaInfo;
@@ -28,14 +31,15 @@ public class KafkaReadUtils implements InitializingBean,AutoCloseable,Disposable
 	public List<String> getData() {
 		List<String> list = new LinkedList<String>();
 		ConsumerRecords<String, String> records = consumer.poll(100);
-		// System.out.println("$$$$$$$$");
 		if (records == null || records.isEmpty())
+		{
+			log.debug("records is null");
 			return list;
-		// System.out.println("&&&&&& is NULL NULL NULL");
+		}
 
 		for (ConsumerRecord<String, String> record : records) {
 			if (record != null && record.value() != null) {
-				// System.out.println("####"+record.value());
+				log.info(record.value());
 				list.add(record.value());
 			}
 		}

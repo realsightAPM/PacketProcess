@@ -18,7 +18,6 @@
 		        <key>destination_ip</key>
 		        <value>192.168.1.2</value>
 	        </field>
-	        
 	        <field>
 		        <key>destinaition_port</key>
 		        <value>8015</value>

@@ -33,9 +33,14 @@ RTT: rtt  获取方法   pkt.tcp.analysis_ack_rtt
 
 原端口:source_port   获取方法 pkt[pkt.transport_layer].srcport
 
+数据包长度: length 获取方法 pkt.length
+
 目的端口号:destinaition_port 获取方法 pkt[pkt.transport_layer].dstport
 获取负载数据:payload 
 获取方法
 mydata = pkt[pkt.highest_layer].data
 mydata.decode("hex")
+
+HTTP 响应时间： http_response_time,获取方法：pkt.layers[3].time
+该方法不保证每个包都有
 

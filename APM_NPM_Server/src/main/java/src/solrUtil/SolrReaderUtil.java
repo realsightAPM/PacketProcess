@@ -111,7 +111,7 @@ public class SolrReaderUtil  implements InitializingBean,AutoCloseable,Disposabl
 			params.addFacetField(this.facetField);
 		}
 		
-		System.err.println(SOLR_URL + " " + params.toQueryString());
+		//System.err.println(SOLR_URL + " " + params.toQueryString());
 		
 		logger.info(SOLR_URL + " " + params.toQueryString());
 		
