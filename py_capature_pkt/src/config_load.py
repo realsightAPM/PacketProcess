@@ -15,4 +15,7 @@ def loadXmlFile(fileName):
         protocolDic[proName]=parList;
     return protocolDic
 
+if __name__ == "__main__":
+    dict = loadXmlFile('protocol.xml')
+    print dict
 
