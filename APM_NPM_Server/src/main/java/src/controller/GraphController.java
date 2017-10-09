@@ -27,12 +27,12 @@ public class GraphController {
 		
 		@RequestMapping(value="/graphJsonData",method=RequestMethod.GET)  
 	    @ResponseBody 
-		public ResponseMessage getGraph(@RequestParam long startTime,@RequestParam long endTime){
+		public ResponseMessage getGraph(@RequestParam String startTime,@RequestParam String endTime){
 			ResponseMessage responseMessage = new ResponseMessage();
-			if(startTime <0 || endTime <0 || startTime>= endTime){
+			/*if(startTime <0 || endTime <0 || startTime>= endTime){
 				responseMessage.setCode(ResponseCode.FAIL.getCode());
 				responseMessage.setData("时间错误");
-			}else{
+			}else{*/
 				try {
 					String graphStr = graphUtil.getGraphByTime(startTime, endTime);
 					responseMessage.setCode(ResponseCode.SUCCESS.getCode());
@@ -42,7 +42,7 @@ public class GraphController {
 					responseMessage.setCode(ResponseCode.FAIL.getCode());
 					responseMessage.setData("获取指定时间段的拓扑图数据错误");
 				}
-			}
+		//	}
 			return responseMessage;
 		}
 		

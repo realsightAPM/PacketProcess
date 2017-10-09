@@ -14,7 +14,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import src.globalinfo.PktInfo;
-import src.globalinfo.SessionFingermark;
 
 @Component
 public class PacketMerge implements Runnable {
@@ -39,9 +38,6 @@ public class PacketMerge implements Runnable {
 	 */
 	private HashMap<String, MergeProcessor> megerProcessors = new HashMap<String, MergeProcessor>();
 
-	@Autowired
-	private SessionFingermark sesionConfig;
-
 	public void init(ConcurrentLinkedQueue<JsonArray> queue,
 			AtomicReference<HashMap<String, JsonObject>> mapAtomicf) {
 		this.queue = queue;
@@ -50,7 +46,7 @@ public class PacketMerge implements Runnable {
 	}
 
 	/*
-	 * 做合并，将一个list的信息
+	 * 做合并，将一个list的信息进行合并
 	 */
 	public void merge(JsonArray pktlist) {
 		for (JsonElement pkt : pktlist) {
@@ -61,7 +57,7 @@ public class PacketMerge implements Runnable {
 				sessionFingermark = getSessionFingermark(pktJO);
 				add(sessionFingermark, pktJO);
 			} catch (Exception e) {
-				log.error(e.getMessage());
+				log.error("#######",e);
 			}
 		}
 	}
@@ -85,26 +81,22 @@ public class PacketMerge implements Runnable {
 	}
 
 	/*
-	 * 获取将可以标示一个会话的字段拼成一个key
+	 * 获取将可以标示一个会话的字段拼成一个key,原服务和目的服务
 	 */
 	private String getSessionFingermark(JsonObject pkt) throws Exception {
-		String color = pkt.get(PktInfo.COLOR.getValue()).getAsString();
-		
-		StringBuilder sb = new StringBuilder();
-		for (String field : sesionConfig.getFiledsList()) {
-			if (pkt.get(field) == null) {
-				throw new Exception("the field of SessionFingermark not exits " + pkt.get(color));
-			} else {
-				sb.append(pkt.get(field));
-			}
-		}
-		return sb.toString();
+		String sourceServerName = pkt.get(PktInfo.SOURCE_SERVER_NAME.getValue()).getAsString();
+		String destinationServerName = pkt.get(PktInfo.DESTINATION_SERVER_NAME.getValue()).getAsString();
+		return sourceServerName+destinationServerName;
 	}
 
 	public void close() {
 		this.shutdown = true;
 	}
 
+	public void registerMergeProcessor(String color,MergeProcessor mp){
+		this.megerProcessors.put(color, mp);
+	}
+	
 	public void run() {
 		while (!shutdown) {
 			JsonArray pktInfoList;
@@ -114,20 +106,6 @@ public class PacketMerge implements Runnable {
 			}else{
 				log.debug("pkt info list is null");
 			}
-		}
-	}
-
-	public boolean register(String color, MergeProcessor processor, boolean cover, SessionFingermark sfm) {
-		if (cover) {
-			sesionConfig = sfm;
-			megerProcessors.put(color, processor);
-			return true;
-		} else {
-			if (megerProcessors.containsKey(color))
-				return false;
-			sesionConfig= sfm;
-			megerProcessors.put(color, processor);
-			return true;
 		}
 	}
 

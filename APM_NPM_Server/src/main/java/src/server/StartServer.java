@@ -15,8 +15,6 @@ import org.springframework.stereotype.Service;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import src.globalinfo.SessionFingermark;
 import src.netanalysis.merge.MergeProcessor;
 import src.netanalysis.merge.PacketMerge;
 import src.netanalysis.merge.PktSender;
@@ -51,8 +49,7 @@ public class StartServer implements  InitializingBean,DisposableBean{
 
 		//注册合并处理的processor
 		MergeProcessor processor = new TCPMergeProcessorImp();
-		packetMerge.register("TCP", processor, true, new SessionFingermark());
-
+		packetMerge.registerMergeProcessor("TCP", processor);
 		// execute
 		packetProcessorPool.execute(packetProducer);
 		packetProcessorPool.execute(packetMerge);

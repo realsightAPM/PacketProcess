@@ -18,7 +18,6 @@ public class TCPMergeProcessorImp implements  MergeProcessor {
 			statisticInfo = new JsonObject();
 			init(statisticInfo, pkt);
 		} else {
-			System.out.println(pkt.toString());
 			long length1 =  statisticInfo.get("length").getAsLong();
 			long length2 =  pkt.get("length").getAsLong();
 			long bytes = length1 + length2;
@@ -31,9 +30,10 @@ public class TCPMergeProcessorImp implements  MergeProcessor {
 		jo.addProperty("source_ip", pkt.get("source_ip").getAsString());
 		jo.addProperty("source_port", pkt.get("source_port").getAsString());
 		jo.addProperty("destination_ip", pkt.get("destination_ip").getAsString());
-		jo.addProperty("destinaition_port", pkt.get("destinaition_port").getAsString());
+		jo.addProperty("destination_port", pkt.get("destination_port").getAsString());
+		jo.addProperty("snifftime", pkt.get("snifftime").getAsString());
 		jo.addProperty("length", pkt.get("length").getAsLong());
 		jo.addProperty(PktInfo.SOURCE_SERVER_NAME.getValue(), pkt.get(PktInfo.SOURCE_SERVER_NAME.getValue()).getAsString());
-		jo.addProperty(PktInfo.DISTINATION_SERVER_NAME.getValue(), pkt.get(PktInfo.DISTINATION_SERVER_NAME.getValue()).getAsString());
+		jo.addProperty(PktInfo.DESTINATION_SERVER_NAME.getValue(), pkt.get(PktInfo.DESTINATION_SERVER_NAME.getValue()).getAsString());
 	}
 }

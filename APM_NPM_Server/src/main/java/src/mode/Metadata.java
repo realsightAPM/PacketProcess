@@ -1,21 +1,29 @@
 package src.mode;
 
 public class Metadata {
-	private String danger;
-	private String normal;
-	
-	public String getDanger() {
+	private int danger;
+	private int normal;
+	private int waring;
+	public int getDanger() {
 		return danger;
 	}
-	public void setDanger(String danger) {
+	public void setDanger(int danger) {
 		this.danger = danger;
 	}
-	public String getNormal() {
+	public int getNormal() {
 		return normal;
 	}
-	public void setNormal(String normal) {
+	public void setNormal(int normal) {
 		this.normal = normal;
 	}
+	public int getWaring() {
+		return waring;
+	}
+	public void setWaring(int waring) {
+		this.waring = waring;
+	}
+	
+	
 	
 	
 }

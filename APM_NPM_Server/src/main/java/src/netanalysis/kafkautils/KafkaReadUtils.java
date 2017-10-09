@@ -39,7 +39,7 @@ public class KafkaReadUtils implements InitializingBean,AutoCloseable,Disposable
 
 		for (ConsumerRecord<String, String> record : records) {
 			if (record != null && record.value() != null) {
-				log.info(record.value());
+				//log.info(record.value());
 				list.add(record.value());
 			}
 		}

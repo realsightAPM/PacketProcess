@@ -7,7 +7,7 @@ public class Node {
 	private String renderer;
 	private String name;
 	private List<Node> nodes;
-	private Metadata metadate;
+	private Metadata metadata;
 	private String showClass;
 	private List<Edge> edge;
 	public String getDisplayName() {
@@ -34,11 +34,11 @@ public class Node {
 	public void setNodes(List<Node> nodes) {
 		this.nodes = nodes;
 	}
-	public Metadata getMetadate() {
-		return metadate;
+	public Metadata getMetadata() {
+		return metadata;
 	}
-	public void setMetadate(Metadata metadate) {
-		this.metadate = metadate;
+	public void setMetadata(Metadata metadata) {
+		this.metadata = metadata;
 	}
 	public String getShowClass() {
 		return showClass;

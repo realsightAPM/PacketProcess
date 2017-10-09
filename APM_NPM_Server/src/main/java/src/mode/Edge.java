@@ -11,7 +11,7 @@ public class Edge {
 	
 	@SerializedName("target")
 	private String destination;
-	private Map<String,Integer> metrics;
+	private Metadata metrics;
 	private List<String> notices;
 	private String showClass;
 	
@@ -28,10 +28,11 @@ public class Edge {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	public Map<String, Integer> getMetrics() {
+	
+	public Metadata getMetrics() {
 		return metrics;
 	}
-	public void setMetrics(Map<String, Integer> metrics) {
+	public void setMetrics(Metadata metrics) {
 		this.metrics = metrics;
 	}
 	public List<String> getNotices() {

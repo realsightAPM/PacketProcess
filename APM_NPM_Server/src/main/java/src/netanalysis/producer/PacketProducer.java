@@ -46,7 +46,6 @@ public class PacketProducer implements Runnable {
 			for (String str : list) {
 				try {
 					JsonArray pktList = parser.parse(str).getAsJsonArray();
-					System.out.println(pktList.toString());
 					dataCache.add(pktList);
 				} catch (Exception e) {
 					log.error("read data from kafka is null", e);

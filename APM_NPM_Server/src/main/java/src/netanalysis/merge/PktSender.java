@@ -3,6 +3,7 @@ package src.netanalysis.merge;
 import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,8 @@ import src.netanalysis.kafkautils.kafkaWriteUtil;
  */
 @Component
 public class PktSender implements Runnable ,DisposableBean{
+	
+	private static Logger log = Logger.getLogger(PktSender.class);
 
 	/*
 	 * 保存一秒内的统计信息
@@ -38,7 +41,7 @@ public class PktSender implements Runnable ,DisposableBean{
 	 */
 	@Override
 	public void run() {
-		System.out.println("Send Data");
+		log.debug("send data");
 		HashMap<String, JsonObject> olderMap = mapAtomicf.get();
 		if (olderMap.isEmpty()) {
 			return;
