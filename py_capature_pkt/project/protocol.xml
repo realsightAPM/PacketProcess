@@ -7,7 +7,7 @@
         <parameter>protocol</parameter>
         <parameter>snifftime</parameter>
         <parameter>source_port</parameter>
-        <parameter>destinaition_port</parameter>
+        <parameter>destination_port</parameter>
         <parameter>length</parameter>
      </protocol>
 </root>

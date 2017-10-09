@@ -47,7 +47,7 @@ class processPkt(multiprocessing.Process):
         self.queue.append(pkt_dst)
         if(len(self.queue) > 100):
             data = json.dumps(self.queue)
-            future = self.producer.send("netpacket",data)
+            future = self.producer.send("test1",data)
             #print "send data"
             result = future.get(timeout=10)
             print "send success"

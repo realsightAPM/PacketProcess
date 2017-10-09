@@ -5,6 +5,8 @@
 get_字段名称
 例如 get_source_ip
 '''
+import time
+from datetime import datetime
 def get_source_ip(pkt):
     return pkt.ip.src
 
@@ -12,7 +14,9 @@ def get_destination_ip(pkt):
     return pkt.ip.dst
 
 def get_snifftime(pkt):
-    return pkt.sniff_timestamp
+    time_long = float(pkt.sniff_timestamp)
+    solrtime = datetime.fromtimestamp(time_long).strftime("%Y-%m-%d \'T\' %H:%M:%S\'Z\'")
+    return solrtime
 
 def get_rtt(pkt):
     return pkt.tcp.analysis_ack_rtt
@@ -20,7 +24,7 @@ def get_rtt(pkt):
 def get_source_port(pkt):
     return pkt[pkt.transport_layer].srcport
 
-def get_destinaition_port(pkt):
+def get_destination_port(pkt):
     return pkt[pkt.transport_layer].dstport
 
 def get_protocol(pkt):
