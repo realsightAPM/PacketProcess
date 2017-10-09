@@ -25,7 +25,26 @@ public class ConfigLoad {
 			key = key.replaceAll("\\s*", "");
 			map.put(key,serverName);
 		});
-		
+		return map;
+	}
+	
+	public static Map<String,String> loadAppServerFromXml(String fileName) throws DocumentException{
+		SAXReader reader = new SAXReader();
+		File file = new File(fileName);
+		Document doc = reader.read(file);
+		Element root = doc.getRootElement();
+		List<Element> childElements = root.elements();
+		Map<String,String> map = new HashMap<>();
+		childElements.forEach((app)->{
+			String appName =  app.attributeValue("name");
+			appName = appName.replaceAll("\\s*", "");
+			List<Element> serverList = app.elements();
+			for(Element  server : serverList){
+				String serverName = server.elementText("server");
+				serverName = serverName.replaceAll("\\s*", "");
+				map.put(serverName, appName);
+			}
+		});
 		return map;
 	}
 	
