@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonArray;
@@ -26,6 +27,9 @@ public class PacketMerge implements Runnable {
 
 	@Autowired
 	private PacketServerTranslate pst;
+	
+	@Value("${sniffTime}")
+	private String sniffTime;//抓取到数据包的时间
 	/*
 	 * 保存一秒内的统计信息
 	 */
@@ -77,6 +81,8 @@ public class PacketMerge implements Runnable {
 		Map<String, JsonObject> map = mapAtomicf.get();
 		JsonObject statisticInfo = map.get(key);
 		statisticInfo = processor.mergerPkt(pkt, statisticInfo);
+		String time = pkt.get(this.sniffTime).getAsString();
+		statisticInfo.addProperty(this.sniffTime,time );
 		map.put(key, statisticInfo);
 	}
 
