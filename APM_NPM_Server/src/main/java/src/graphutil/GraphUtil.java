@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import src.globalinfo.PktInfo;
+import src.globalinfo.ProtocolServer;
+import src.globalinfo.ServerApplication;
 import src.mode.Edge;
 import src.mode.Metadata;
 import src.mode.Node;
@@ -30,6 +33,16 @@ public class GraphUtil implements InitializingBean{
 	@Autowired
 	private SolrReaderUtil solrReaderUtil;
 	
+	@Autowired
+	private ProtocolServer ps;//转换得到server name
+	
+	@Autowired
+	private ServerApplication sa;//根据server name 得到
+	
+	@Autowired
+	private PktInfo pktInfo;
+
+	/*
 	@Value("${edgeSource}")
 	private String edgeSource;//原端
 	
@@ -38,12 +51,14 @@ public class GraphUtil implements InitializingBean{
 	
 	@Value("${sniffTime}")
 	private String sniffTime;//抓取到数据包的时间
+	*/
 	
 	@Autowired
 	private JsonTranslate jsonTranslate;
 	
 	private Gson gson = new Gson();
 	
+	//设置查询出原服务和目的服务
 	private String[] edgeSource_Destination;
 	
 	private Logger log = LoggerFactory.getLogger(GraphUtil.class);
@@ -51,8 +66,8 @@ public class GraphUtil implements InitializingBean{
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		this.edgeSource_Destination = new String[2];
-		this.edgeSource_Destination[0] = edgeSource;
-		this.edgeSource_Destination[1] = this.edgeDestination;
+		this.edgeSource_Destination[0] = this.pktInfo.getSOURCE_SERVER_NAME();
+		this.edgeSource_Destination[1] = this.pktInfo.getDESTINATION_SERVER_NAME();
 	}
 	
 	private Set<String> getAllNodeId(String facetField,String[] queryFilters,String[] fields) throws SolrServerException{
@@ -90,14 +105,16 @@ public class GraphUtil implements InitializingBean{
 	public  List<Node> getAllNodesByTime(String startTime,String endTime) throws SolrServerException{
 		String[] queryFilters = new String[1];
 		queryFilters[0] = this.timeQuery(startTime, endTime);
-		Set<String> nodeIdSet = getAllNodeId(this.edgeDestination,queryFilters,this.edgeSource_Destination);
+		Set<String> nodeIdSet = getAllNodeId(this.pktInfo.getDESTINATION_SERVER_NAME(),queryFilters,this.edgeSource_Destination);
 		
 		List<Node> nodeList = new LinkedList<Node>();
 		
 		nodeIdSet.forEach((String nodeId)->{
+			//把名称做转换，将IP:PORT转换成服务名称
+			String serverName = ps.getserverName(nodeId);
 			Node node = new Node();
-			node.setDisplayName(nodeId);
-			node.setName(nodeId);
+			node.setDisplayName(serverName);
+			node.setName(serverName);
 			nodeList.add(node);
 		});
 		return nodeList;
@@ -129,8 +146,10 @@ public class GraphUtil implements InitializingBean{
 		metadata.setWaring(95);
 		queryResult.forEach((json)->{
 			Edge edge = new Edge();
-			edge.setSource(json.get(edgeSource).getAsString());
-			edge.setDestination(json.get(edgeDestination).getAsString());
+			String sourceServerName = this.getServerName(json, this.pktInfo.getSOURCE_SERVER_NAME());
+			String destinationServerName = this.getServerName(json, this.pktInfo.getDESTINATION_SERVER_NAME());
+			edge.setSource(sourceServerName);
+			edge.setDestination(destinationServerName);
 			edge.setMetrics(metadata);
 			edgeList.add(edge);
 		});
@@ -151,9 +170,16 @@ public class GraphUtil implements InitializingBean{
 	private String timeQuery(String startTime,String  endTime){
 	/*	String startTimeStr =this.sniffTime+":"+ "["+timeUtil.formatUnixtime2(startTime)+" "+"TO"+
 				" "+timeUtil.formatUnixtime2(endTime) +"]";*/
-		String startTimeStr =this.sniffTime+":"+ "["+startTime+" "+"TO"+
+		String startTimeStr =this.pktInfo.getSniffTime()+":"+ "["+startTime+" "+"TO"+
 				" "+endTime +"]";
 		log.info(startTimeStr);
 		return startTimeStr;
 	}
+	
+	private String getServerName(JsonObject pkt,String key){
+		String ipportKey = pkt.get(key).getAsString();
+		return this.ps.getserverName(ipportKey);
+	}
+	
+
 }

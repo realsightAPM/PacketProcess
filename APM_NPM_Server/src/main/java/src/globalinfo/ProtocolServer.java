@@ -6,19 +6,21 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
 
-import src.graphutil.GraphUtil;
-
 @Component
 public class ProtocolServer implements InitializingBean{
 	
 	@Value("${protocol_server_file}")
 	private String protocol_server_file;
+	
+	@Autowired
+	private PktInfo pktInfo;
 	
 	private Map<String,String> map = new HashMap<>();
 	
@@ -44,9 +46,13 @@ public class ProtocolServer implements InitializingBean{
 		String sourceServerName = this.map.getOrDefault(sourceKey, "client");
 		String destinationServerName = this.map.getOrDefault(destinationKey, "client");
 		log.info(sourceServerName+"  $$$$$$$$  "+destinationServerName);
-		resultMap.put(PktInfo.SOURCE_SERVER_NAME.getValue(), sourceServerName);
-		resultMap.put(PktInfo.DESTINATION_SERVER_NAME.getValue(),destinationServerName );
+		resultMap.put(pktInfo.getSOURCE_SERVER_NAME(), sourceServerName);
+		resultMap.put(pktInfo.getDESTINATION_SERVER_NAME(),destinationServerName );
 		return resultMap;
+	}
+	
+	public String getserverName(String key){
+		return this.map.get(key);
 	}
 	
 }

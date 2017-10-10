@@ -47,6 +47,4 @@ public class ConfigLoad {
 		});
 		return map;
 	}
-	
-	
 }

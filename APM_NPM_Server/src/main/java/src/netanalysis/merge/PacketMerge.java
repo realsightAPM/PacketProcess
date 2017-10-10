@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.google.gson.JsonArray;
@@ -15,6 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import src.globalinfo.PktInfo;
+import src.globalinfo.ProtocolServer;
 
 @Component
 public class PacketMerge implements Runnable {
@@ -24,12 +24,13 @@ public class PacketMerge implements Runnable {
 	 */
 	private ConcurrentLinkedQueue<JsonArray> queue;
 	private boolean shutdown;
-
-	@Autowired
-	private PacketServerTranslate pst;
 	
-	@Value("${sniffTime}")
-	private String sniffTime;//抓取到数据包的时间
+	@Autowired
+	private PktInfo pktInfo;
+	
+	@Autowired
+	private ProtocolServer ps;//转换得到server name
+	
 	/*
 	 * 保存一秒内的统计信息
 	 */
@@ -57,7 +58,14 @@ public class PacketMerge implements Runnable {
 			JsonObject pktJO = pkt.getAsJsonObject();
 			String sessionFingermark;
 			try {
-				pktJO = pst.packetToApplication(pktJO);
+				pktJO = packetToApplication(pktJO);
+				//把IP和端口号作为标示一个会话原端和目的端
+				String sourceIP = pktJO.get(pktInfo.getSourceIP()).getAsString();
+				String sourcePort = pktJO.get(pktInfo.getSourcePort()).getAsString();
+				String destinationIP = pktJO.get(pktInfo.getDestinationIP()).getAsString();
+				String destinationPort = pktJO.get(pktInfo.getDestinationPort()).getAsString();
+				pktJO.addProperty(pktInfo.getsIPPort(), sourceIP+":"+sourcePort);
+				pktJO.addProperty(pktInfo.getdIPPort(), destinationIP+":"+destinationPort);
 				sessionFingermark = getSessionFingermark(pktJO);
 				add(sessionFingermark, pktJO);
 			} catch (Exception e) {
@@ -70,7 +78,7 @@ public class PacketMerge implements Runnable {
 	 * 将一个数据包加入统计结果
 	 */
 	private void add(String key, JsonObject pkt) {
-		String color = pkt.get(PktInfo.COLOR.getValue()).getAsString();
+		String color = pkt.get(pktInfo.getCOLOR()).getAsString();
 		if (color == null) {
 			log.error("color is null sessionkey is " + key);
 		}
@@ -81,8 +89,6 @@ public class PacketMerge implements Runnable {
 		Map<String, JsonObject> map = mapAtomicf.get();
 		JsonObject statisticInfo = map.get(key);
 		statisticInfo = processor.mergerPkt(pkt, statisticInfo);
-		String time = pkt.get(this.sniffTime).getAsString();
-		statisticInfo.addProperty(this.sniffTime,time );
 		map.put(key, statisticInfo);
 	}
 
@@ -90,8 +96,8 @@ public class PacketMerge implements Runnable {
 	 * 获取将可以标示一个会话的字段拼成一个key,原服务和目的服务
 	 */
 	private String getSessionFingermark(JsonObject pkt) throws Exception {
-		String sourceServerName = pkt.get(PktInfo.SOURCE_SERVER_NAME.getValue()).getAsString();
-		String destinationServerName = pkt.get(PktInfo.DESTINATION_SERVER_NAME.getValue()).getAsString();
+		String sourceServerName = pkt.get(pktInfo.getSOURCE_SERVER_NAME()).getAsString();
+		String destinationServerName = pkt.get(pktInfo.getDESTINATION_SERVER_NAME()).getAsString();
 		return sourceServerName+destinationServerName;
 	}
 
@@ -113,6 +119,13 @@ public class PacketMerge implements Runnable {
 				log.debug("pkt info list is null");
 			}
 		}
+	}
+	
+	private JsonObject packetToApplication(JsonObject pkt) {
+		Map<String,String> map = ps.getServerName(pkt);
+		pkt.addProperty(this.pktInfo.getSOURCE_SERVER_NAME(), map.get(this.pktInfo.getSOURCE_SERVER_NAME()));
+		pkt.addProperty(this.pktInfo.getDESTINATION_SERVER_NAME(), map.get(this.pktInfo.getDESTINATION_SERVER_NAME()));
+		return pkt;
 	}
 
 }
