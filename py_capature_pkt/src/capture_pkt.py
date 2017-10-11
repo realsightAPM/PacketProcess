@@ -27,10 +27,12 @@ class capturePkt(multiprocessing.Process):
     def process(self,pkt):
         pkt_dst = {}
         layer_list = []
+        pkt_dst['frame_number'] = pkt.number
         pkt_dst['highest_layer'] = pkt.highest_layer
+        pkt_dst['length'] = pkt.length
         time_long = float(pkt.sniff_timestamp)
         pkt_dst['sniff_timestamp'] = long(time_long)
-        pkt_dst['solrtime'] = datetime.fromtimestamp(time_long).strftime("%Y-%m-%d\'T\'%H:%M:%S\'Z\'")
+        pkt_dst['rs_timestamp'] = datetime.fromtimestamp(time_long).strftime("%Y-%m-%dT%H:%M:%SZ")
         for layer in pkt:
             layer_name = layer.layer_name
             if not self.dict.has_key(layer_name):
@@ -43,7 +45,7 @@ class capturePkt(multiprocessing.Process):
         return pkt_dst
 
     def run(self):
-        #cap = pyshark.LiveCapture(interface=self.interface_name,only_summaries=False)
-        cap = pyshark.FileCapture("../pcap/http_pkt.pcap",only_summaries=False,keep_packets=False)
+        cap = pyshark.LiveCapture(interface=self.interface_name,only_summaries=False)
+        #cap = pyshark.FileCapture("../pcap/http_pkt.pcap",only_summaries=False,keep_packets=False)
         cap.apply_on_packets(self.__add_pkt)
 

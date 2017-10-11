@@ -15,13 +15,33 @@
 
     <protocol title='protocol'>
         <name>tcp</name>
+        <parameter>seq</parameter>
         <parameter>srcport</parameter>
         <parameter>dstport</parameter>
         <parameter>hdr_len</parameter>
         <parameter>len</parameter>
         <parameter>source_port</parameter>
+        <parameter>window_size</parameter>
+        <parameter>window_size_scalefactor</parameter>
+        <parameter>window_size_value</parameter>
+        <parameter>flags_ack</parameter>
+        <parameter>flags_syn</parameter>
+        <parameter>flags_fin</parameter>
+        <parameter>flags_reset</parameter>
+        <parameter>flags_push</parameter>
+        <parameter>flags_cwr</parameter>
+        <parameter>flags_ecn</parameter>
+        <parameter>flags_ns</parameter>
+        <parameter>_ws_expert_message</parameter>
+        <parameter>_ws_expert_group</parameter>
+        <parameter>_ws_expert_severity</parameter>
         <parameter>analysis_bytes_in_flight</parameter>
         <parameter>analysis_push_bytes_sent</parameter>
+        <parameter>analysis_ack_rtt</parameter>
+        <parameter>analysis_initial_rtt</parameter>
+        <parameter>analysis_retransmission</parameter>
+        <parameter>analysis_rto</parameter>
+        <parameter>analysis_rto_frame</parameter>
     </protocol>
 
     <protocol title='protocol'>
@@ -32,6 +52,7 @@
         <parameter>request_full_uri</parameter>
         <parameter>request_uri</parameter>
         <parameter>request_method</parameter>
+        <parameter>request_uri_query</parameter>
         <parameter>user_agent</parameter>
         <parameter>accept</parameter>
         <parameter>accept_encoding</parameter>
@@ -41,10 +62,13 @@
         <parameter>data_len</parameter>
         <parameter>content_type</parameter>
         <parameter>content_encoding</parameter>
+        <parameter>content_length</parameter>
+        <parameter>file_data</parameter>
         <parameter>date</parameter>
         <parameter>response_code_desc</parameter>
         <parameter>response_code</parameter>
         <parameter>set_cookie</parameter>
+        <parameter>server</parameter>
     </protocol>
 
     <protocol title='protocol'>
@@ -60,15 +84,41 @@
     </protocol>
 
     <protocol title='protocol'>
+        <name>mysql</name>
+        <parameter>command</parameter>
+        <parameter>packet_length</parameter>
+        <parameter>packet_number</parameter>
+        <parameter>request</parameter>
+        <parameter>query</parameter>
+        <parameter>schema</parameter>
+        <parameter>_ws_expert_message</parameter>
+        <parameter>affected_rows</parameter>
+        <parameter>stat_ps_out_params</parameter>
+        <parameter>stat_query_was_slow</parameter>
+        <parameter>stat_session_state_changed</parameter>
+    </protocol>
+
+    <protocol title='protocol'>
+        <name>pgsql</name>
+        <parameter>type</parameter>
+        <parameter>length</parameter>
+        <parameter>query</parameter>
+        <parameter>parameter_name</parameter>
+        <parameter>parameter_value</parameter>
+        <parameter>statement</parameter>
+    </protocol>
+
+    <protocol title='protocol'>
         <name>tns</name>
-        <parameter>qry_name</parameter>
-        <parameter>qry_type</parameter>
-        <parameter>resp_name</parameter>
-        <parameter>resp_type</parameter>
-        <parameter>resp_ttl</parameter>
-        <parameter>resp_len</parameter>
-        <parameter>time</parameter>
-        <parameter>a</parameter>
+        <parameter></parameter>
+    </protocol>
+
+    <protocol title='protocol'>
+        <name>tds</name>
+        <parameter>type</parameter>
+        <parameter>length</parameter>
+        <parameter>query</parameter>
+        <parameter>packet_number</parameter>
     </protocol>
 
 </root>
