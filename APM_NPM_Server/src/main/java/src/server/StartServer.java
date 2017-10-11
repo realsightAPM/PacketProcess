@@ -36,6 +36,9 @@ public class StartServer implements  InitializingBean,DisposableBean{
 	@Autowired
 	private PktSender ps;
 	
+	@Autowired
+	private TCPMergeProcessorImp processor;
+	
 	private  AtomicReference<HashMap<String, JsonObject>> mapAtomicf;
 
 	public  void packetMergeStrat() {
@@ -48,7 +51,7 @@ public class StartServer implements  InitializingBean,DisposableBean{
 		packetMerge.init(queue, mapAtomicf);
 
 		//注册合并处理的processor
-		MergeProcessor processor = new TCPMergeProcessorImp();
+	//	MergeProcessor processor = new TCPMergeProcessorImp();
 		packetMerge.registerMergeProcessor("TCP", processor);
 		// execute
 		packetProcessorPool.execute(packetProducer);

@@ -37,16 +37,19 @@ public class ConfigLoad {
 		Map<String,String> map = new HashMap<>();
 		childElements.forEach((app)->{
 			String appName =  app.attributeValue("name");
+			if(appName == null || appName.isEmpty()){
+				System.err.println("appName is null");
+			}
 			appName = appName.replaceAll("\\s*", "");
+			
 			List<Element> serverList = app.elements();
 			for(Element  server : serverList){
-				String serverName = server.elementText("server");
+				System.out.println("######  "+server.asXML());
+				String serverName = server.attributeValue("name");;
 				serverName = serverName.replaceAll("\\s*", "");
 				map.put(serverName, appName);
 			}
 		});
 		return map;
 	}
-	
-	
 }

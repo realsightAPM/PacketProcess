@@ -1,7 +1,9 @@
 package src.netanalysis.merge;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import src.globalinfo.PktInfo;
@@ -10,30 +12,37 @@ import src.globalinfo.PktInfo;
  * 处理tcp协议的信息统计
  */
 @Component
-public class TCPMergeProcessorImp implements  MergeProcessor {
+public class TCPMergeProcessorImp extends  MergeProcessor {
 
+	@Autowired
+	public TCPMergeProcessorImp(PktInfo pktInfo){
+		super(pktInfo);
+	}
+	
 	@Override
-	public JsonObject mergerPkt(JsonObject pkt, JsonObject statisticInfo) {
+	public JsonObject process(JsonObject pkt, JsonObject statisticInfo) {
 		if (statisticInfo == null) {
 			statisticInfo = new JsonObject();
 			init(statisticInfo, pkt);
 		} else {
-			long length1 =  statisticInfo.get("length").getAsLong();
-			long length2 =  pkt.get("length").getAsLong();
+			String length = pktInfo.getLength();
+			JsonElement str = statisticInfo.get(length);
+			long length1 =  str.getAsLong();
+			long length2 =  pkt.get(pktInfo.getLength()).getAsLong();
 			long bytes = length1 + length2;
-			statisticInfo.addProperty("length", bytes);
+			statisticInfo.addProperty(pktInfo.getLength(), bytes);
 		}
 		return statisticInfo;
 	}
 
 	private void init(JsonObject jo, JsonObject pkt) {
-		jo.addProperty("source_ip", pkt.get("source_ip").getAsString());
-		jo.addProperty("source_port", pkt.get("source_port").getAsString());
-		jo.addProperty("destination_ip", pkt.get("destination_ip").getAsString());
-		jo.addProperty("destination_port", pkt.get("destination_port").getAsString());
-		jo.addProperty("snifftime", pkt.get("snifftime").getAsString());
-		jo.addProperty("length", pkt.get("length").getAsLong());
-		jo.addProperty(PktInfo.SOURCE_SERVER_NAME.getValue(), pkt.get(PktInfo.SOURCE_SERVER_NAME.getValue()).getAsString());
-		jo.addProperty(PktInfo.DESTINATION_SERVER_NAME.getValue(), pkt.get(PktInfo.DESTINATION_SERVER_NAME.getValue()).getAsString());
+		jo.addProperty(pktInfo.getSourceIP(), pkt.get(pktInfo.getSourceIP()).getAsString());
+		jo.addProperty(pktInfo.getSourcePort(), pkt.get(pktInfo.getSourcePort()).getAsString());
+		jo.addProperty(pktInfo.getDestinationIP(), pkt.get(pktInfo.getDestinationIP()).getAsString());
+		jo.addProperty(pktInfo.getDestinationPort(), pkt.get(pktInfo.getDestinationPort()).getAsString());
+		jo.addProperty(pktInfo.getSniffTime(), pkt.get(pktInfo.getSniffTime()).getAsString());
+		jo.addProperty(pktInfo.getLength(), pkt.get(pktInfo.getLength()).getAsLong());
+		//jo.addProperty(pktInfo.getSOURCE_SERVER_NAME(), pkt.get(pktInfo.getSOURCE_SERVER_NAME()).getAsString());
+		//jo.addProperty(pktInfo.getDESTINATION_SERVER_NAME(), pkt.get(pktInfo.getDESTINATION_SERVER_NAME()).getAsString());
 	}
 }
