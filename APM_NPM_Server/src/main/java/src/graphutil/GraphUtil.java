@@ -4,12 +4,14 @@ import java.lang.reflect.Type;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import src.globalinfo.PktInfo;
 import src.globalinfo.ProtocolServer;
 import src.globalinfo.ServerApplication;
 import src.mode.Edge;
+import src.mode.Graph;
 import src.mode.Metadata;
 import src.mode.Node;
 import src.solrUtil.SolrReaderUtil;
@@ -19,9 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -51,10 +53,13 @@ public class GraphUtil implements InitializingBean{
 	
 	@Value("${sniffTime}")
 	private String sniffTime;//抓取到数据包的时间
-	*/
+	
 	
 	@Autowired
-	private JsonTranslate jsonTranslate;
+	private JsonTranslate jsonTranslate;*/
+	
+	@Autowired
+	private ServerApplication serverApplication;
 	
 	private Gson gson = new Gson();
 	
@@ -66,8 +71,8 @@ public class GraphUtil implements InitializingBean{
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		this.edgeSource_Destination = new String[2];
-		this.edgeSource_Destination[0] = this.pktInfo.getSOURCE_SERVER_NAME();
-		this.edgeSource_Destination[1] = this.pktInfo.getDESTINATION_SERVER_NAME();
+		this.edgeSource_Destination[0] = this.pktInfo.getSourceNodeIP();
+		this.edgeSource_Destination[1] = this.pktInfo.getDestinationNodeIP();
 	}
 	
 	private Set<String> getAllNodeId(String facetField,String[] queryFilters,String[] fields) throws SolrServerException{
@@ -94,7 +99,6 @@ public class GraphUtil implements InitializingBean{
 				log.info("key "+k);
 				nodeIdSet.add(k);
 			});
-			
 		}
 		return nodeIdSet;
 	}
@@ -105,16 +109,16 @@ public class GraphUtil implements InitializingBean{
 	public  List<Node> getAllNodesByTime(String startTime,String endTime) throws SolrServerException{
 		String[] queryFilters = new String[1];
 		queryFilters[0] = this.timeQuery(startTime, endTime);
-		Set<String> nodeIdSet = getAllNodeId(this.pktInfo.getDESTINATION_SERVER_NAME(),queryFilters,this.edgeSource_Destination);
+		Set<String> nodeIdSet = getAllNodeId(this.pktInfo.getDestinationNodeIP(),queryFilters,this.edgeSource_Destination);
 		
 		List<Node> nodeList = new LinkedList<Node>();
 		
 		nodeIdSet.forEach((String nodeId)->{
 			//把名称做转换，将IP:PORT转换成服务名称
-			String serverName = ps.getserverName(nodeId);
+		//	String serverName = ps.getserverName(nodeId);
 			Node node = new Node();
-			node.setDisplayName(serverName);
-			node.setName(serverName);
+			node.setDisplayName(nodeId);
+			node.setName(nodeId);
 			nodeList.add(node);
 		});
 		return nodeList;
@@ -129,6 +133,7 @@ public class GraphUtil implements InitializingBean{
 		queryFilter[0] = timeQuery(startTime,endTime);
 		//solrReaderUtil.setQueryFilters(queryFilter);
 		solrReaderUtil.setQueryField(edgeSource_Destination);
+		
 		
 		try {
 			solrReaderUtil.query();
@@ -145,13 +150,15 @@ public class GraphUtil implements InitializingBean{
 		metadata.setNormal(100);
 		metadata.setWaring(95);
 		queryResult.forEach((json)->{
-			Edge edge = new Edge();
-			String sourceServerName = this.getServerName(json, this.pktInfo.getSOURCE_SERVER_NAME());
-			String destinationServerName = this.getServerName(json, this.pktInfo.getDESTINATION_SERVER_NAME());
-			edge.setSource(sourceServerName);
-			edge.setDestination(destinationServerName);
-			edge.setMetrics(metadata);
-			edgeList.add(edge);
+			if(!json.isJsonNull() && !json.toString().equals("{}")){
+				Edge edge = new Edge();
+				String sourceNodeName = this.getServerName(json, this.pktInfo.getSourceNodeIP());
+				String destinationNodeName = this.getServerName(json, this.pktInfo.getDestinationNodeIP());
+				edge.setSource(sourceNodeName);
+				edge.setDestination(destinationNodeName);
+				edge.setMetrics(metadata);
+				edgeList.add(edge);
+			}
 		});
 		return edgeList;
 	}
@@ -160,7 +167,65 @@ public class GraphUtil implements InitializingBean{
 	public String  getGraphByTime(String startTime,String endTime) throws SolrServerException{
 		List<Node> nodeList = getAllNodesByTime(startTime,endTime);
 		List<Edge> edgeList = getAllEdgeByTime(startTime,endTime);
-		String graphStr = this.jsonTranslate.getGraphJson(edgeList, nodeList);
+		Map<String,Node> appNodeMap = Maps.newHashMap();
+		Map<String,Edge> appEdgeMap = Maps.newHashMap();
+		
+		//归类每个APP所属的server
+		nodeList.forEach((node)->{
+				String nodeName = node.getName();
+				String appName = this.serverApplication.getAppName(nodeName);
+				if(!appNodeMap.containsKey(appName))
+				{
+					Node newNode =  new Node();
+					newNode.setDisplayName(appName);
+					newNode.setName(appName);
+					appNodeMap.put(appName,newNode);
+				}
+				Node graph = appNodeMap.get(appName);
+				if(graph == null) System.err.println("graph is null");
+				List<Node> list = graph.getNodes();
+				if(list ==null) System.err.println("list is null");
+				
+				List<Node> nodesOfGraph = Optional.ofNullable(graph)
+				.map(g->g.getNodes())
+				.orElseThrow(()->new NullPointerException("GraphUtil 处理APP所属的server，出现空指针异常"));
+				nodesOfGraph.add(node);
+		});
+		
+		//处理所有的边
+		Metadata metadata = new Metadata();
+		metadata.setDanger(5);
+		metadata.setNormal(100);
+		metadata.setWaring(95);
+		edgeList.forEach((edge)->{
+			String sourceServer = edge.getSource();
+			String destinationServer = edge.getDestination();
+			String sourceApp = this.sa.getAppName(sourceServer);
+			String destinationApp = this.sa.getAppName(destinationServer);
+			if(sourceApp.equals(destinationApp)){
+				Node graph = appNodeMap.get(sourceApp);
+				List<Edge> edges = graph.getEdges();
+				edges.add(edge);
+			}else{
+				Edge newedge = new Edge();
+				newedge.setDestination(destinationApp);
+				newedge.setSource(sourceApp);
+				edge.setMetrics(metadata);
+				appEdgeMap.put(destinationApp+sourceApp, newedge);
+			}
+		});
+		Graph bigGraph = new Graph();
+		List<Edge> bigEdgelist = Lists.newLinkedList();
+		appEdgeMap.forEach((k,edge)->{
+			bigEdgelist.add(edge);
+		});
+		List<Node> bigNodelist = Lists.newLinkedList();
+		appNodeMap.forEach((k,node)->{
+			bigNodelist.add(node);
+		});
+		bigGraph.setConnections(bigEdgelist);
+		bigGraph.setNodes(bigNodelist);
+		String graphStr = this.gson.toJson(bigGraph);
 		return graphStr;
 	}
 	
@@ -177,8 +242,10 @@ public class GraphUtil implements InitializingBean{
 	}
 	
 	private String getServerName(JsonObject pkt,String key){
-		String ipportKey = pkt.get(key).getAsString();
-		return this.ps.getserverName(ipportKey);
+		System.err.println(pkt.toString());
+		System.err.println("#### key ###"+key);
+		String serverName = pkt.get(key).getAsString();
+		return serverName;
 	}
 	
 

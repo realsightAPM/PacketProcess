@@ -1,5 +1,8 @@
 package src.controller;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.apache.solr.client.solrj.SolrServerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +40,15 @@ public class GraphController {
 					String graphStr = graphUtil.getGraphByTime(startTime, endTime);
 					responseMessage.setCode(ResponseCode.SUCCESS.getCode());
 					responseMessage.setData(graphStr);
+					FileWriter writer;
+			        try {
+			            writer = new FileWriter("/Users/zyd/test.json");
+			            writer.write(graphStr);
+			            writer.flush();
+			            writer.close();
+			        } catch (IOException e) {
+			            e.printStackTrace();
+			        }
 				} catch (SolrServerException e) {
 					log.error("获取指定时间段的拓扑图数据错误", e);
 					responseMessage.setCode(ResponseCode.FAIL.getCode());

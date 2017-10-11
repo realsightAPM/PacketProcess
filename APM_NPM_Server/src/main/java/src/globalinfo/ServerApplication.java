@@ -18,7 +18,7 @@ public class ServerApplication implements InitializingBean {
 	private String app_server_file;
 	
 	public String getAppName(String serverName){
-		return serverToAppmap.get(serverName);
+		return serverToAppmap.getOrDefault(serverName, "other");
 	}
 	
 	public void init() throws DocumentException{

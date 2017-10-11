@@ -1,15 +1,19 @@
 package src.mode;
 
+import java.util.LinkedList;
 import java.util.List;
+
+import com.google.gson.annotations.SerializedName;
 
 public class Node {
 	private String displayName;
 	private String renderer;
 	private String name;
-	private List<Node> nodes;
+	private List<Node> nodes = new LinkedList<Node>();
 	private Metadata metadata;
 	private String showClass;
-	private List<Edge> edge;
+	@SerializedName("connections")
+	private List<Edge> edges = new LinkedList<Edge>();
 	public String getDisplayName() {
 		return displayName;
 	}
@@ -46,11 +50,11 @@ public class Node {
 	public void setShowClass(String showClass) {
 		this.showClass = showClass;
 	}
-	public List<Edge> getEdge() {
-		return edge;
+	public List<Edge> getEdges() {
+		return edges;
 	}
-	public void setEdge(List<Edge> edge) {
-		this.edge = edge;
+	public void setEdges(List<Edge> edges) {
+		this.edges = edges;
 	}
 	
 	

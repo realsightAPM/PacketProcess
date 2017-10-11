@@ -1,16 +1,24 @@
 package src.globalinfo;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class PktInfo {
 	@Value("${color}")
 	private String COLOR;
 	
-	@Value("${source_server_name}")
-	private 	String SOURCE_SERVER_NAME;
+	@Value("${source_node_ip}")
+	private 	String sourceNodeIP;
 	
-	@Value("$(destinaiton_server_name)")
-	private String DESTINATION_SERVER_NAME;
+	@Value("${destination_node_ip}")
+	private String destinationNodeIP;
+	
+	@Value("${source_node_name}")
+	private 	String sourceNodeName;
+	
+	@Value("$(destinaton_node_Name)")
+	private String destinationNodeName;
 	
 	@Value("${sniffTime}")
 	private String sniffTime;
@@ -33,6 +41,9 @@ public class PktInfo {
 	@Value("${d_ip_port}")
 	private String dIPPort;
 	
+	@Value("${length}")
+	private String length;
+	
 	public String getCOLOR() {
 		return COLOR;
 	}
@@ -41,20 +52,20 @@ public class PktInfo {
 		COLOR = cOLOR;
 	}
 
-	public String getSOURCE_SERVER_NAME() {
-		return SOURCE_SERVER_NAME;
+	public String getSourceNodeIP() {
+		return sourceNodeIP;
 	}
 
-	public void setSOURCE_SERVER_NAME(String sOURCE_SERVER_NAME) {
-		SOURCE_SERVER_NAME = sOURCE_SERVER_NAME;
+	public void setSourceNodeIP(String sourceNodeIP) {
+		this.sourceNodeIP = sourceNodeIP;
 	}
 
-	public String getDESTINATION_SERVER_NAME() {
-		return DESTINATION_SERVER_NAME;
+	public String getDestinationNodeIP() {
+		return destinationNodeIP;
 	}
 
-	public void setDESTINATION_SERVER_NAME(String dESTINATION_SERVER_NAME) {
-		DESTINATION_SERVER_NAME = dESTINATION_SERVER_NAME;
+	public void setDestinationNodeIP(String destinationNodeIP) {
+		this.destinationNodeIP = destinationNodeIP;
 	}
 
 	public String getSniffTime() {
@@ -113,5 +124,28 @@ public class PktInfo {
 		this.dIPPort = dIPPort;
 	}
 
-	
+	public String getLength() {
+		return length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
+	}
+
+	public String getSourceNodeName() {
+		return sourceNodeName;
+	}
+
+	public void setSourceNodeName(String sourceNodeName) {
+		this.sourceNodeName = sourceNodeName;
+	}
+
+	public String getDestinationNodeName() {
+		return destinationNodeName;
+	}
+
+	public void setDestinationNodeName(String destinationNodeName) {
+		this.destinationNodeName = destinationNodeName;
+	}
+
 }
