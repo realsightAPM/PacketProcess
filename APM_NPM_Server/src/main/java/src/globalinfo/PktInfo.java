@@ -43,6 +43,15 @@ public class PktInfo {
 	
 	@Value("${length}")
 	private String length;
+
+	@Value("${count}")
+	private String count;
+
+	@Value("${window_size}")
+	private String windowSize;
+
+	@Value("${expert_message}")
+	private String expertMessage;
 	
 	public String getCOLOR() {
 		return COLOR;
@@ -147,5 +156,11 @@ public class PktInfo {
 	public void setDestinationNodeName(String destinationNodeName) {
 		this.destinationNodeName = destinationNodeName;
 	}
+
+	public String getWindowSize() { return windowSize; }
+
+	public String getCount() { return  count; }
+
+	public String getExpertMessage() { return expertMessage; }
 
 }

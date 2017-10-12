@@ -56,18 +56,9 @@ public class PacketMerge implements Runnable {
 	public void merge(JsonArray pktlist) {
 		for (JsonElement pkt : pktlist) {
 			JsonObject pktJO = pkt.getAsJsonObject();
-			String sessionFingermark;
 			try {
 				pktJO = packetToApplication(pktJO);
-				//把IP和端口号作为标示一个会话原端和目的端
-				/*String sourceIP = pktJO.get(pktInfo.getSourceIP()).getAsString();
-				String sourcePort = pktJO.get(pktInfo.getSourcePort()).getAsString();
-				String destinationIP = pktJO.get(pktInfo.getDestinationIP()).getAsString();
-				String destinationPort = pktJO.get(pktInfo.getDestinationPort()).getAsString();
-				pktJO.addProperty(pktInfo.getsIPPort(), sourceIP+":"+sourcePort);
-				pktJO.addProperty(pktInfo.getdIPPort(), destinationIP+":"+destinationPort);*/
-				sessionFingermark = getSessionFingermark(pktJO);
-				add(sessionFingermark, pktJO);
+				add(pktJO);
 			} catch (Exception e) {
 				log.error("#######",e);
 				e.printStackTrace();
@@ -78,16 +69,22 @@ public class PacketMerge implements Runnable {
 	/*
 	 * 将一个数据包加入统计结果
 	 */
-	private void add(String key, JsonObject pkt) {
+	private void add(JsonObject pkt) {
 		String color = pkt.get(pktInfo.getCOLOR()).getAsString();
 		if (color == null) {
-			log.error("color is null sessionkey is " + key);
+			log.error("color is null");
+			return;
 		}
+
 		MergeProcessor processor = megerProcessors.get(color.toUpperCase());
+
 		if (processor == null) {
 			log.error("color  " + color + " no Mergeprocessor");
 			return;
 		}
+
+		String key = processor.getSessionFingermark(pkt);
+
 		Map<String, JsonObject> map = mapAtomicf.get();
 		JsonObject statisticInfo = map.get(key);
 		statisticInfo = processor.mergerPkt(pkt, statisticInfo);
@@ -97,11 +94,13 @@ public class PacketMerge implements Runnable {
 	/*
 	 * 获取将可以标示一个会话的字段拼成一个key,原服务和目的服务
 	 */
+	/*
 	private String getSessionFingermark(JsonObject pkt) throws Exception {
 		String sourceServerName = pkt.get(pktInfo.getSourceNodeName()).getAsString();
 		String destinationServerName = pkt.get(pktInfo.getDestinationNodeName()).getAsString();
 		return sourceServerName+destinationServerName;
 	}
+	*/
 
 	public void close() {
 		this.shutdown = true;

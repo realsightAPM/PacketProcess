@@ -52,6 +52,7 @@ public class PktSender implements Runnable ,DisposableBean{
 				return;
 			}
 			String data = getData(olderMap);
+			System.err.println(data);
 			writer.sendData(data);
 		}
 	}

@@ -36,19 +36,19 @@ public class ProtocolServer implements InitializingBean{
 	
 	public Map<String,String> getServerName(JsonObject pkt){
 		String sourceIP = pktInfo.getSourceIP();
-		System.err.println("##### "+pkt.toString());
+		//System.err.println("##### "+pkt.toString());
 		String sourceserverIp = pkt.get(sourceIP).getAsString();
 		String destinationServerIp = pkt.get(pktInfo.getDestinationIP()).getAsString();
 		
 		String sourceKey = sourceserverIp;
 		String destinationKey = destinationServerIp;
-		log.info(sourceKey+" &&&&&&& "+destinationKey);
+		//log.info(sourceKey+" &&&&&&& "+destinationKey);
 		Map<String,String> resultMap = Maps.newHashMap();
 		String sourceServerName = this.map.getOrDefault(sourceKey, "client");
 		String destinationServerName = this.map.getOrDefault(destinationKey, "client");
-		log.info(sourceServerName+"  $$$$$$$$  "+destinationServerName);
+		//log.info(sourceServerName+"  $$$$$$$$  "+destinationServerName);
 		resultMap.put(pktInfo.getSourceNodeName(), sourceServerName);
-		resultMap.put(pktInfo.getDestinationNodeName(),destinationServerName );
+		resultMap.put(pktInfo.getDestinationNodeName(), destinationServerName );
 		return resultMap;
 	}
 	
