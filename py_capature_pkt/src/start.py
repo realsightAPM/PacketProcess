@@ -4,7 +4,6 @@ import sys, os, argparse, ConfigParser, logging
 from capture_pkt import capturePkt
 from process_pkt import processPkt
 from multiprocessing import Process,Pipe
-import config_load
 from daemon import Daemon
 
 levels = {

@@ -15,7 +15,6 @@ class processPkt(multiprocessing.Process):
         if has_repetition:
             self.bloomFilter = BloomFilter.MyBloomFilter()
             self.pkt_fingerprint_dst = pkt_fingerprint_dst
-        self.topic = "netpacket"
         self.queue = []
         self.has_repetition = has_repetition
         self.kafka_addr = configParser.get('kafka', 'addr')

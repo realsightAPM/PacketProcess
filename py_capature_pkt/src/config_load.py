@@ -16,6 +16,6 @@ def loadXmlFile(fileName):
     return protocolDic
 
 if __name__ == "__main__":
-    dict = loadXmlFile('protocol.xml')
+    dict = loadXmlFile('../conf/protocol.xml')
     print dict
 

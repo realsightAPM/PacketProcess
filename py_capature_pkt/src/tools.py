@@ -14,9 +14,9 @@ import gzip, zlib
 
 class Tools:
     def check_protocol(self, timeout):
-        cap = pyshark.FileCapture('/Users/jiajia/Downloads/eth0.cap')
-        #cap = pyshark.LiveCapture(interface='en0')
-        #cap.sniff(packet_count=timeout)
+        #cap = pyshark.FileCapture('/Users/jiajia/Develop/workspace/PacketProcess/py_capature_pkt/pcap/TNS_Oracle1.pcap')
+        cap = pyshark.LiveCapture(interface='en0')
+        cap.sniff(packet_count=timeout)
         protocol_list = []
         for pkt in cap:
             for layer in pkt:
@@ -29,9 +29,9 @@ class Tools:
         print
 
     def print_protocol(self, proto, timeout):
-        cap = pyshark.FileCapture('/Users/jiajia/Develop/workspace/PacketProcess/py_capature_pkt/pcap/http_pkt.pcap')
-        # cap = pyshark.LiveCapture(interface='en0')
-        # cap.sniff(packet_count=timeout)
+        #cap = pyshark.FileCapture('/Users/jiajia/Develop/workspace/PacketProcess/py_capature_pkt/pcap/TNS_Oracle1.pcap')
+        cap = pyshark.LiveCapture(interface='en0')
+        cap.sniff(packet_count=timeout)
         for pkt in cap:
             for layer in pkt:
                 name = layer.layer_name
@@ -44,5 +44,5 @@ class Tools:
 
 if __name__ == "__main__":
     tools = Tools()
-    #tools.check_protocol(10)
-    tools.print_protocol('tcp', 10)
+    tools.check_protocol(10)
+    tools.print_protocol('tns', 10)
