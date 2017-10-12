@@ -49,4 +49,10 @@ public class Edge {
 		this.showClass = showClass;
 	}
 	
+	public boolean equals(Object obj){
+		if(obj instanceof Edge){
+			
+		}
+		return false;
+	}
 }
