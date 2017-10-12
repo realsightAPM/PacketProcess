@@ -11,7 +11,9 @@ levels = {
     'ERROR' : logging.ERROR,
     'WARNING' : logging.WARNING,
     'INFO' : logging.INFO,
-    'DEBUG' : logging.DEBUG
+    'DEBUG' : logging.DEBUG,
+    'DEBUG_LOCAL' : logging.DEBUG,
+    'DEBUG_KAFAK': logging.DEBUG,
 }
 
 class npm(Daemon):

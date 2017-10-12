@@ -5,22 +5,12 @@
         <name>ip</name>
         <parameter>src</parameter>
         <parameter>dst</parameter>
-        <parameter>src_host</parameter>
-        <parameter>dst_host</parameter>
-        <parameter>version</parameter>
-        <parameter>ttl</parameter>
-        <parameter>hdr_len</parameter>
-        <parameter>len</parameter>
     </protocol>
 
     <protocol title='protocol'>
         <name>tcp</name>
-        <parameter>seq</parameter>
         <parameter>srcport</parameter>
         <parameter>dstport</parameter>
-        <parameter>hdr_len</parameter>
-        <parameter>len</parameter>
-        <parameter>source_port</parameter>
         <parameter>window_size</parameter>
         <parameter>window_size_scalefactor</parameter>
         <parameter>window_size_value</parameter>
@@ -32,18 +22,6 @@
         <parameter>flags_cwr</parameter>
         <parameter>flags_ecn</parameter>
         <parameter>flags_ns</parameter>
-        <parameter>_ws_expert_message</parameter>
-        <parameter>_ws_expert_group</parameter>
-        <parameter>_ws_expert_severity</parameter>
-        <parameter>analysis_bytes_in_flight</parameter>
-        <parameter>analysis_push_bytes_sent</parameter>
-        <parameter>dst</parameter>
-        <parameter>src</parameter>
-        <parameter>analysis_ack_rtt</parameter>
-        <parameter>analysis_initial_rtt</parameter>
-        <parameter>analysis_retransmission</parameter>
-        <parameter>analysis_rto</parameter>
-        <parameter>analysis_rto_frame</parameter>
     </protocol>
 
     <protocol title='protocol'>
@@ -51,26 +29,18 @@
         <parameter>host</parameter>
         <parameter>prev_request_in</parameter>
         <parameter>request_in</parameter>
+        <parameter>prev_response_in</parameter>
+        <parameter>response_in</parameter>
         <parameter>request_full_uri</parameter>
         <parameter>request_uri</parameter>
         <parameter>request_method</parameter>
         <parameter>request_uri_query</parameter>
+        <parameter>response_code</parameter>
         <parameter>user_agent</parameter>
-        <parameter>accept</parameter>
-        <parameter>accept_encoding</parameter>
         <parameter>referer</parameter>
-        <parameter>cookie</parameter>
         <parameter>time</parameter>
         <parameter>data_len</parameter>
-        <parameter>content_type</parameter>
-        <parameter>content_encoding</parameter>
         <parameter>content_length</parameter>
-        <parameter>file_data</parameter>
-        <parameter>date</parameter>
-        <parameter>response_code_desc</parameter>
-        <parameter>response_code</parameter>
-        <parameter>set_cookie</parameter>
-        <parameter>server</parameter>
     </protocol>
 
    <protocol title='protocol'>
@@ -108,11 +78,6 @@
         <parameter>parameter_name</parameter>
         <parameter>parameter_value</parameter>
         <parameter>statement</parameter>
-    </protocol>
-
-    <protocol title='protocol'>
-        <name>tns</name>
-        <parameter></parameter>
     </protocol>
 
     <protocol title='protocol'>

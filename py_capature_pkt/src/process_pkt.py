@@ -44,16 +44,24 @@ class processPkt(multiprocessing.Process):
             value = self.__get_pkt_fingerprint(pkt_dst)
             if self.bloomFilter.contains(value):
                 return
+        if self.configParser.get("logging", "loglevel") == "DEBUG_LOCAL":
+            if self.configParser.get("logging", "logfield"):
+                field = self.configParser.get("logging", "logfield")
+                if pkt_dst.has_key(field):
+                    print pkt_dst[field]
+            else:
+                print pkt_dst
         self.queue.append(pkt_dst)
         if(len(self.queue) > 100):
             data = json.dumps(self.queue)
-            #logging.debug(data)
-
-            if self.configParser.get("logging", "loglevel") == "DEBUG":
+            if self.configParser.get("logging", "loglevel") == "DEBUG_KAFKA":
                 future = self.producer.send(self.kafka_topic,data)
-                logging.debug("send data")
+                print "Send:"
+                print data
                 result = future.get(timeout=10)
-                logging.debug("send success")
+                print "Result:"
+                print result
+                print
             else:
                 self.producer.send(self.kafka_topic, data)
             self.queue=[]
