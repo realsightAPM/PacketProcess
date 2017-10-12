@@ -11,9 +11,13 @@ public class Node {
 	private String name;
 	private List<Node> nodes = new LinkedList<Node>();
 	private Metadata metadata;
-	private String showClass;
+	
+	@SerializedName("class")
+	private String showClass="normal";
+	
 	@SerializedName("connections")
 	private List<Edge> edges = new LinkedList<Edge>();
+	
 	public String getDisplayName() {
 		return displayName;
 	}

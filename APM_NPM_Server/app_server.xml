@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ROOT>
+		<app name = "ehr">
+			<server name="10.0.67.21"/>
+			<server name="10.4.45.66"/>
+			<server name = "10.4.45.208"/>
+		</app>
+ 	<app name="psdmis">
+			<server name="10.4.45.74"/>
+			<server name="10.4.53.24"/>
+			<server name="10.0.67.23"/>
+		</app>
+		<app name="apm">
+			<server name="10.0.67.31"/>
+			<server name="10.0.67.14"/>
+			<server name="10.0.67.32"/>
+		</app>
+</ROOT>

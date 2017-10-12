@@ -179,6 +179,7 @@ public class GraphUtil implements InitializingBean{
 					Node newNode =  new Node();
 					newNode.setDisplayName(appName);
 					newNode.setName(appName);
+					newNode.setRenderer("region");
 					appNodeMap.put(appName,newNode);
 				}
 				Node graph = appNodeMap.get(appName);
@@ -197,11 +198,16 @@ public class GraphUtil implements InitializingBean{
 		metadata.setDanger(5);
 		metadata.setNormal(100);
 		metadata.setWaring(95);
+		Set<String> edgeSet = Sets.newHashSet();
+		
 		edgeList.forEach((edge)->{
 			String sourceServer = edge.getSource();
 			String destinationServer = edge.getDestination();
 			String sourceApp = this.sa.getAppName(sourceServer);
 			String destinationApp = this.sa.getAppName(destinationServer);
+			if(!edgeSet.add(sourceServer+destinationServer)){
+				
+			}
 			if(sourceApp.equals(destinationApp)){
 				Node graph = appNodeMap.get(sourceApp);
 				List<Edge> edges = graph.getEdges();
@@ -210,7 +216,7 @@ public class GraphUtil implements InitializingBean{
 				Edge newedge = new Edge();
 				newedge.setDestination(destinationApp);
 				newedge.setSource(sourceApp);
-				edge.setMetrics(metadata);
+				newedge.setMetrics(metadata);
 				appEdgeMap.put(destinationApp+sourceApp, newedge);
 			}
 		});

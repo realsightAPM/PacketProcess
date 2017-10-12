@@ -12,7 +12,9 @@ public class Edge {
 	private String destination;
 	private Metadata metrics;
 	private List<String> notices;
-	private String showClass;
+	
+	@SerializedName("class")
+	private String showClass ="normal";
 	
 	public String getSource() {
 		return source;

@@ -22,6 +22,8 @@
         <parameter>source_port</parameter>
         <parameter>analysis_bytes_in_flight</parameter>
         <parameter>analysis_push_bytes_sent</parameter>
+        <parameter>dst</parameter>
+        <parameter>src</parameter>
     </protocol>
 
     <protocol title='protocol'>
@@ -47,7 +49,7 @@
         <parameter>set_cookie</parameter>
     </protocol>
 
-    <protocol title='protocol'>
+   <protocol title='protocol'>
         <name>dns</name>
         <parameter>qry_name</parameter>
         <parameter>qry_type</parameter>
@@ -70,5 +72,4 @@
         <parameter>time</parameter>
         <parameter>a</parameter>
     </protocol>
-
 </root>

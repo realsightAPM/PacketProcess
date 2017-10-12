@@ -6,12 +6,12 @@ import java.util.List;
 public class Graph {
 	private List<Node> nodes = new LinkedList<Node>() ;
 	private List<Edge> connections = new LinkedList<Edge>();
-	private long serverUpdateTime;
+	private long serverUpdateTime = System.currentTimeMillis();
 	
 	
 	private String name= "us-west-2";
    private String renderer="global";
-   private  int maxVolume=500;
+  //private  int maxVolume=500;
 	
 	public List<Node> getNodes() {
 		return nodes;
@@ -46,12 +46,12 @@ public class Graph {
 	public void setRenderer(String renderer) {
 		this.renderer = renderer;
 	}
-	public int getMaxVolume() {
+	/*public int getMaxVolume() {
 		return maxVolume;
 	}
 	public void setMaxVolume(int maxVolume) {
 		this.maxVolume = maxVolume;
 	}
-	
+	*/
 	
 }

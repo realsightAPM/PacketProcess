@@ -2,16 +2,30 @@ package apm.netanalysis;
 
 
 
+import java.util.Map;
+
+import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 
 public class Test {
 
 	public static void main(String[] args) {
-		
-		
+		JsonParser parser = new JsonParser();
+		JsonObject jo = parser.parse("{}").getAsJsonObject();
+		if(jo.isJsonNull()){
+			System.out.println("@@@@@@");
+		}else{
+			System.out.println("******");
+		}
+		//Son son = new Son();
+		//son.print();
+		/*Map<String,String> map = Maps.newHashMap();
+	
+		map.compute("aaa", (k,v)->(v==null)?"aaaa":"bbb");*/
 		/*Properties props = new Properties();
 		 props.put("bootstrap.servers", "localhost:9092");
 		 props.put("acks", "all");

@@ -44,6 +44,6 @@ class capturePkt(multiprocessing.Process):
 
     def run(self):
         #cap = pyshark.LiveCapture(interface=self.interface_name,only_summaries=False)
-        cap = pyshark.FileCapture("../pcap/http_pkt.pcap",only_summaries=False,keep_packets=False)
+        cap = pyshark.FileCapture("/Users/zyd/socket.cap",only_summaries=False,keep_packets=False)
         cap.apply_on_packets(self.__add_pkt)
 

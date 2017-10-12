@@ -63,7 +63,7 @@ public class SolrReaderUtil  implements InitializingBean,AutoCloseable,Disposabl
 	
 	private String facetField;//facet的字段
 	
-	private int rows = 200;
+	private int rows = 1000;
 	
 	private String sortField = null;//排序的字段
 	

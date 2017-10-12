@@ -4,6 +4,8 @@ public class Metadata {
 	private int danger;
 	private int normal;
 	private int waring;
+	private int streaming;
+	
 	public int getDanger() {
 		return danger;
 	}
@@ -22,8 +24,11 @@ public class Metadata {
 	public void setWaring(int waring) {
 		this.waring = waring;
 	}
-	
-	
-	
+	public int getStreaming() {
+		return streaming;
+	}
+	public void setStreaming(int streaming) {
+		this.streaming = streaming;
+	}
 	
 }
