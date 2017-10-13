@@ -13,7 +13,7 @@ levels = {
     'INFO' : logging.INFO,
     'DEBUG' : logging.DEBUG,
     'DEBUG_LOCAL' : logging.DEBUG,
-    'DEBUG_KAFAK': logging.DEBUG,
+    'DEBUG_KAFKA': logging.DEBUG,
 }
 
 class npm(Daemon):
@@ -60,7 +60,7 @@ if __name__ == "__main__":
     npm = npm(pid_path, configParser)
 
     print "NPM Starting"
-    npm.run();
+    npm.run()
 
     '''
     args = parser.parse_args()

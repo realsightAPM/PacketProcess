@@ -27,7 +27,7 @@ for pkt in cap:
     #if not pkt.number in ['839', '841', '857', '859']:
     #    continue
     if pkt.highest_layer != 'HTTP': continue
-    #print "Number:" + pkt.number
+    print "Number:" + pkt.number
     #print pkt.frame_info
     #print pkt.highest_layer
     #print pkt.interface_captured, pkt.length, pkt.number, pkt.captured_length

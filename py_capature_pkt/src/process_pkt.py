@@ -19,6 +19,7 @@ class processPkt(multiprocessing.Process):
         self.has_repetition = has_repetition
         self.kafka_addr = configParser.get('kafka', 'addr')
         self.kafka_topic = configParser.get('kafka', 'topic')
+        self.kafka_push_batch = configParser.getint('kafka', 'kafka_push_batch')
         self.configParser = configParser
 
     def run(self):
@@ -44,24 +45,16 @@ class processPkt(multiprocessing.Process):
             value = self.__get_pkt_fingerprint(pkt_dst)
             if self.bloomFilter.contains(value):
                 return
-        if self.configParser.get("logging", "loglevel") == "DEBUG_LOCAL":
-            if self.configParser.get("logging", "logfield"):
-                field = self.configParser.get("logging", "logfield")
-                if pkt_dst.has_key(field):
-                    print pkt_dst[field]
-            else:
-                print pkt_dst
         self.queue.append(pkt_dst)
-        if(len(self.queue) > 100):
+        #print pkt_dst
+
+        if(len(self.queue) > self.kafka_push_batch):
             data = json.dumps(self.queue)
             if self.configParser.get("logging", "loglevel") == "DEBUG_KAFKA":
                 future = self.producer.send(self.kafka_topic,data)
-                print "Send:"
-                print data
                 result = future.get(timeout=10)
                 print "Result:"
                 print result
-                print
             else:
                 self.producer.send(self.kafka_topic, data)
             self.queue=[]

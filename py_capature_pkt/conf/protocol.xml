@@ -14,14 +14,6 @@
         <parameter>window_size</parameter>
         <parameter>window_size_scalefactor</parameter>
         <parameter>window_size_value</parameter>
-        <parameter>flags_ack</parameter>
-        <parameter>flags_syn</parameter>
-        <parameter>flags_fin</parameter>
-        <parameter>flags_reset</parameter>
-        <parameter>flags_push</parameter>
-        <parameter>flags_cwr</parameter>
-        <parameter>flags_ecn</parameter>
-        <parameter>flags_ns</parameter>
     </protocol>
 
     <protocol title='protocol'>
@@ -32,12 +24,8 @@
         <parameter>prev_response_in</parameter>
         <parameter>response_in</parameter>
         <parameter>request_full_uri</parameter>
-        <parameter>request_uri</parameter>
         <parameter>request_method</parameter>
-        <parameter>request_uri_query</parameter>
         <parameter>response_code</parameter>
-        <parameter>user_agent</parameter>
-        <parameter>referer</parameter>
         <parameter>time</parameter>
         <parameter>data_len</parameter>
         <parameter>content_length</parameter>
