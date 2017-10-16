@@ -19,6 +19,8 @@
     <protocol title='protocol'>
         <name>http</name>
         <parameter>host</parameter>
+        <parameter>request</parameter>
+        <parameter>response</parameter>
         <parameter>prev_request_in</parameter>
         <parameter>request_in</parameter>
         <parameter>prev_response_in</parameter>

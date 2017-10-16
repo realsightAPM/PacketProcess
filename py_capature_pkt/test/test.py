@@ -11,6 +11,7 @@ import gzip, zlib
 #cap = pyshark.FileCapture('/Users/jiajia/Develop/workspace/PacketProcess/py_capature_pkt/pcap/TNS_Oracle1.pcap')
 cap = pyshark.FileCapture('/Users/jiajia/Develop/workspace/PacketProcess/py_capature_pkt/pcap/http_pkt.pcap')
 
+cap.load_packets()
 
 # 从网络接口上进行捕获
 

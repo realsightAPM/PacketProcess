@@ -12,8 +12,8 @@ levels = {
     'WARNING' : logging.WARNING,
     'INFO' : logging.INFO,
     'DEBUG' : logging.DEBUG,
-    'DEBUG_LOCAL' : logging.DEBUG,
-    'DEBUG_KAFKA': logging.DEBUG,
+    'DEBUG_LOCAL' : logging.INFO,
+    'DEBUG_KAFKA': logging.INFO,
 }
 
 class npm(Daemon):
@@ -37,11 +37,11 @@ class npm(Daemon):
         writer = capturePkt(in_pipe, self.configParser)
 
         # Read from pipe and push to Kafka
-        reader = processPkt(output_pipe, self.configParser)
+        #reader = processPkt(self.configParser)
 
         writer.start()
-        reader.start()
-        reader.join()
+        #reader.start()
+        #reader.join()
         writer.join()
 
 if __name__ == "__main__":

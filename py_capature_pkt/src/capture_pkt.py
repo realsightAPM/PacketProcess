@@ -5,6 +5,7 @@ import json, logging, time
 import Queue
 from config_load import loadXmlFile
 from datetime import datetime
+import redis
 
 class capturePkt(multiprocessing.Process):
 
@@ -16,54 +17,56 @@ class capturePkt(multiprocessing.Process):
         self.localcheck = configParser.get('npm', 'localcheck')
         self.localfile = configParser.get('npm', 'localfile')
         self.dict = loadXmlFile(self.dict_name)
-        self.http_stack = {}
-        self.number_queue = Queue.Queue()
-        self.maxsize = configParser.getint('npm', 'queuesize')
+        self.rediscli = redis.Redis(host="localhost", port=6379)
+
+    def init_redis(self):
+        pass
 
     def __add_pkt(self,pkt):
-        #print "add pkt"v
-        try:
-            pkt_dst = self.process(pkt)
-            if (pkt_dst is not None):
-                self.in_pipe.send(json.dumps(pkt_dst))
-        except Exception ,e:
-            print e
-            logging.error(e);
+        #try:
+        pkt_dst = self.capture(pkt)
+        if pkt_dst != None:
+            self.send(pkt_dst)
+        else:
+            pass
+        #except Exception ,e:
+        #    print e
+        #    logging.error(e);
     
-    def process(self,pkt):
+    def capture(self, pkt):
+        logging.debug(pkt.highest_layer)
         pkt_dst = {}
-        layer_list = []
+        #highest_layer = pkt.highest_layer.lower()
+        #if not self.dict.has_key(highest_layer):
+        #    return None
         pkt_dst['frame_number'] = pkt.number
         pkt_dst['highest_layer'] = pkt.highest_layer
-        if not self.dict.has_key(pkt_dst['highest_layer'].lower()):
-            return None
-        if pkt.highest_layer != 'HTTP': return None
         pkt_dst['length'] = pkt.length
         time_long = float(pkt.sniff_timestamp)
         pkt_dst['sniff_timestamp'] = long(time_long)
         pkt_dst['rs_timestamp'] = datetime.fromtimestamp(time_long).strftime("%Y-%m-%dT%H:%M:%SZ")
-        flag = True
+        pkt_dst['layer_list'] = []
         for layer in pkt:
             layer_name = layer.layer_name
-            if not self.dict.has_key(layer_name):
-                continue
-            layer_list.append(layer_name)
+            if not self.dict.has_key(layer_name): continue
+            pkt_dst['layer_list'].append(layer_name)
+            if layer_name == 'ip':
+                self.capture_ip(layer, pkt_dst)
             if layer_name == 'tcp':
-               self.process_tcp(layer, pkt_dst)
-            if layer_name == 'http':
-                flag = self.process_http(layer, pkt_dst)
-            else:
-                for name in layer.field_names:
-                    if name != "" and name in self.dict[layer_name]:
-                        pkt_dst[name] = layer.get_field(name)
-        pkt_dst['layer_list'] = ','.join(layer_list)
-        if flag:
-            #print pkt_dst
-            return pkt_dst
-        else:
-            return None
+                self.capture_tcp(layer, pkt_dst)
+            elif layer_name == 'http':
+                self.capture_http(layer, pkt_dst)
+            #else:
+            #    self.capture_other(pkt, pkt_dst)
 
-    def process_tcp(self, layer, pkt_dst):
+        return pkt_dst
+
+    def capture_ip(self, layer, pkt_dst):
+        for name in layer.field_names:
+            if name in self.dict['ip']:
+                pkt_dst[name] = layer.get_field(name)
+
+    def capture_tcp(self, layer, pkt_dst):
         pkt_dst['expert_message'] = ''
         pkt_dst['flags'] = []
         for name in layer.field_names:
@@ -83,45 +86,34 @@ class capturePkt(multiprocessing.Process):
                 else:
                     pkt_dst[name] = val
         pkt_dst['flags'] = ",".join(sorted(pkt_dst['flags']))
-    def process_http(self, layer, pkt_dst):
-        flag = False
-        field_list = layer.field_names
-        frame_no = pkt_dst['frame_number']
-        for name in field_list:
+
+    def capture_http(self, layer, pkt_dst):
+        logging.debug("capture http")
+        for name in layer.field_names:
             if name != "" and name in self.dict['http']:
                 pkt_dst[name] = layer.get_field(name)
-        if 'request' in field_list:
-            if not self.http_stack.has_key(frame_no):
-                self.http_stack[frame_no] = pkt_dst
-                if len(self.http_stack) > self.maxsize:
-                    print "Max Size: " + len(self.http_stack)
-                    for i in self.http_stack:
-                        pkt = self.http_stack.get(i)
-                        if pkt['sniff_timestamp'] < (time.time() - 10):
-                            self.http_stack.pop(i)
-                    print "Size After Clean: " + len(self.http_stack)
-            else:
-                #print 'Dup request'
-                pass
-        elif 'response' in field_list:
-            if pkt_dst.has_key('request_in'):
-                request_in = pkt_dst.get('request_in')
-                if self.http_stack.has_key(request_in):
-                    pkt_req = self.http_stack.get(request_in)
-                    for i in pkt_req:
-                        pkt_dst[i] = pkt_req.get(i)
-                    pkt_dst['response'] = 1
-                    self.http_stack.pop(request_in)
-                    flag = True
-                else:
-                    #print "No prev request"
-                    pass
-            else:
-                #print "No request in"
-                pass
+            #if name == 'request':
+            #    print 'Rquest: ' + str(pkt_dst['frame_number']) + ' ' + layer.get_field('request_full_uri')
+            #elif name == 'response':
+            #    print "Response: " + layer.get_field('request_in') + ' ' + pkt_dst['highest_layer']
+
+    def capture_other(self, layer, pkt_dst):
+        for name in layer.field_names:
+            if name != "" and name in self.dict[layer.layer_name]:
+                pkt_dst[name] = layer.get_field(name)
+
+
+    def send(self, pkt_dst):
+        if 'http' in pkt_dst['layer_list']:
+            if pkt_dst.has_key('request'):
+                #print 'Rquest: ' + str(pkt_dst['frame_number']) + ' ' + pkt_dst['request_full_uri']
+                req_key = 'http_request:'+pkt_dst['frame_number']
+                self.rediscli.setex(req_key, json.dumps(pkt_dst), 60)
+            elif pkt_dst.has_key('response'):
+                #print "Response: " + str(pkt_dst['request_in']) + ' ' + pkt_dst['highest_layer']
+                self.rediscli.lpush('http_response', json.dumps(pkt_dst))
         else:
-            pass
-        return flag
+            self.rediscli.lpush(pkt_dst['highest_layer'], json.dumps(pkt_dst))
 
     def run(self):
         if self.localcheck == 'on':
